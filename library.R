@@ -1,0 +1,18 @@
+library(dynlm)
+library(tvReg)
+library(ggplot2)
+library(patchwork)
+library(rjd3sts)
+library(strucchange)
+library(knitr)
+library(numbers)
+library(rollRegres)
+library(claiRe)
+library(forecast)
+library(dplyr)
+library(lintr)
+library(styler)
+
+data <- readRDS("data/data.RDS")
+data <- window(data, start = c(1992,2),
+               end = c(2019,4))
