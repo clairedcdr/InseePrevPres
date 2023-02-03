@@ -49,7 +49,6 @@ stat_agr_is = rbind(mean_is_c1, mean_is_c3, mean_is_c4, mean_is_c5, mean_is_manu
 
 # Stats agrégées out of sample ------------
 
-rmse_oos_all = rmse_oos
 rmse_oos_all = data.frame(cbind(ssm_lm = rmse_ssm_oos, rmse_oos))
 rmse_oos_all = apply(rmse_oos_all, 2, unlist)
 
@@ -67,3 +66,4 @@ mean_oos_c5 = apply(apply(rmse_oos_c5, 2, `/`, rmse_oos_c5[,"lm"]), 2, mean, na.
 mean_oos_manuf = apply(apply(rmse_oos_manuf, 2, `/`, rmse_oos_manuf[,"lm"]), 2, mean, na.rm = TRUE)
 
 stat_agr_oos = rbind(mean_oos_c1, mean_oos_c3, mean_oos_c4, mean_oos_c5, mean_oos_manuf)
+
