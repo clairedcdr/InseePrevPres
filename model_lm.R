@@ -15,8 +15,6 @@ model_manuf_3 <- dynlm(prod_manuf ~ +ind1997Q2 + ind2008Q4 + ind2009Q1 + ind2011
                        data = data
 )
 
-########### Modeles sectoriels
-
 
 model_c1_1<- dynlm(
   formula = prod_c1 ~ins_climat_c1_m1+ins_tppa_c1_m1+diff(ins_oscd_c1_m1,1),
@@ -153,7 +151,6 @@ model_c5_4<- dynlm(
     ind2008Q4+ind2009Q1,
   data = data
 )
-
 
 
 model_c5_5<- dynlm(
