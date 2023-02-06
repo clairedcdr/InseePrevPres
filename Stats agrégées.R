@@ -25,8 +25,17 @@ rmse_oos <- do.call(rbind, rmse_oos)
 colnames(rmse_oos) = c(colnames(rmse_oos)[1:4], "piece_lm fixed coeff", "piece_tvlm fixed coeff", "TvLM fixed coeff")
 
 
-# Stats agrégées in sample ------------
+# False oos tvlm ---------
 
+tvlm = lapply(test_fixed, function(x) {
+  x$model$tvlm
+})
+false_oos_tvlm = lapply(tvlm, rmse_false_oos_tvlm)
+
+comp_tvlm = data.frame(cbind(oos_tvlm = rmse_oos[,"TvLM"], false_oos_tvlm, diff_1_2 = unlist(comp_tvlm[,1]) - unlist(comp_tvlm[,2])))
+
+
+# Stats agrégées in sample ------------
 
 rmse_is_all = data.frame(cbind(ssm_lm = rmse_ssm_is, rmse_is))
 rmse_is_all = apply(rmse_is_all, 2, unlist)
@@ -49,7 +58,7 @@ stat_agr_is = rbind(mean_is_c1, mean_is_c3, mean_is_c4, mean_is_c5, mean_is_manu
 
 # Stats agrégées out of sample ------------
 
-rmse_oos_all = data.frame(cbind(ssm_lm = rmse_ssm_oos, rmse_oos))
+rmse_oos_all = data.frame(cbind(ssm_lm = rmse_ssm_oos, rmse_oos, false_oos_tvlm))
 rmse_oos_all = apply(rmse_oos_all, 2, unlist)
 
 rmse_oos_c1 = rmse_oos_all[rownames(rmse_oos_all) %in% ls(pattern = "model_c1_"),]
