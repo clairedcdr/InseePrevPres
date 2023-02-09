@@ -9,7 +9,7 @@ rmse_ssm_is = lapply(ssm_lm_all, function(x){
   rmse_res(x$smoothed_states[, ncol(x$smoothed_states)])
 })
 
-plot(cbind(ssm_lm_all$model_c5_6$data[,1], ssm_lm_all$model_c5_6$fitted[,1]),
+plot(cbind(ssm_lm_all$model_c5_5$data[,1], ssm_lm_all$model_c5_5$fitted[,1]),
      plot.type = "s",
      col = c("black", "red"))
 

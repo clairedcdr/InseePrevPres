@@ -1,25 +1,54 @@
 
-test_variant_fixed = lapply(seq_along(model_variant), function(i) {
-  rmse_prev(formula = get_formula_variants[[i]],
-            data = data,
-            var_fixes = fixed_coef_variants[[i]],
-            date = 28,
-            fixed_bw = TRUE)
-})
-names(test_variant_fixed) = names(model_variant)
-test_invariant_fixed = lapply(lapply(model_invariant, get_formula), rmse_prev, data = data, date = 28, fixed_bw = TRUE)
+years = window(time(data), start = 1999.5, end = 2015)
 
-test_fixed = c(test_invariant_fixed[1:9],
-               test_variant_fixed[1],
-               test_invariant_fixed[10],
-               test_variant_fixed[2:3],
-               test_invariant_fixed[11:17],
-               test_variant_fixed[4:9],
-               test_invariant_fixed[18:19],
-               test_variant_fixed[10])
+ri_tvlm = sapply(test_fixed, get_indicateurs_all, years = years)
 
-years = window(time(data), end = 2015)
+ri_tvlm_c1 = ri_tvlm[names(ri_tvlm) %in% ls(pattern = "model_c1_")]
+ri_tvlm_c3 = ri_tvlm[names(ri_tvlm) %in% ls(pattern = "model_c3_")]
+ri_tvlm_c4 = ri_tvlm[names(ri_tvlm) %in% ls(pattern = "model_c4_")]
+ri_tvlm_c5 = ri_tvlm[names(ri_tvlm) %in% ls(pattern = "model_c5_")]
+ri_tvlm_manuf = ri_tvlm[names(ri_tvlm) %in% ls(pattern = "model_manuf_")]
 
-indicateurs_revisions_tvlm = sapply(test_fixed, get_indicateurs_all, years = years)
+ri_tvlm_1_10 = unlist(sapply(ri_tvlm, function(x) {x[, "Difference 1-10"]} ))
+ri_tvlm_1_15 = unlist(sapply(ri_tvlm, function(x) {x[, "Difference 1-15"]} ))
+ri_tvlm_1_20 = unlist(sapply(ri_tvlm, function(x) {x[, "Difference 1-20"]} ))
+ri_tvlm_1_last = unlist(sapply(ri_tvlm, function(x) {x[, "Difference 1-end"]} ))
+ri_tvlm_20_last = unlist(sapply(ri_tvlm, function(x) {x[, "Difference 20-end"]} ))
 
-# graphs boite à moustache
+ri_tvlm_c1_1_10 = unlist(sapply(ri_tvlm_c1, function(x) {x[, "Difference 1-10"]} ))
+ri_tvlm_c1_1_15 = unlist(sapply(ri_tvlm_c1, function(x) {x[, "Difference 1-15"]} ))
+ri_tvlm_c1_1_20 = unlist(sapply(ri_tvlm_c1, function(x) {x[, "Difference 1-20"]} ))
+ri_tvlm_c1_1_last = unlist(sapply(ri_tvlm_c1, function(x) {x[, "Difference 1-end"]} ))
+ri_tvlm_c1_20_last = unlist(sapply(ri_tvlm_c1, function(x) {x[, "Difference 20-end"]} ))
+
+ri_tvlm_c3_1_10 = unlist(sapply(ri_tvlm_c3, function(x) {x[, "Difference 1-10"]} ))
+ri_tvlm_c3_1_15 = unlist(sapply(ri_tvlm_c3, function(x) {x[, "Difference 1-15"]} ))
+ri_tvlm_c3_1_20 = unlist(sapply(ri_tvlm_c3, function(x) {x[, "Difference 1-20"]} ))
+ri_tvlm_c3_1_last = unlist(sapply(ri_tvlm_c3, function(x) {x[, "Difference 1-end"]} ))
+ri_tvlm_c3_20_last = unlist(sapply(ri_tvlm_c3, function(x) {x[, "Difference 20-end"]} ))
+
+ri_tvlm_c4_1_10 = unlist(sapply(ri_tvlm_c4, function(x) {x[, "Difference 1-10"]} ))
+ri_tvlm_c4_1_15 = unlist(sapply(ri_tvlm_c4, function(x) {x[, "Difference 1-15"]} ))
+ri_tvlm_c4_1_20 = unlist(sapply(ri_tvlm_c4, function(x) {x[, "Difference 1-20"]} ))
+ri_tvlm_c4_1_last = unlist(sapply(ri_tvlm_c4, function(x) {x[, "Difference 1-end"]} ))
+ri_tvlm_c4_20_last = unlist(sapply(ri_tvlm_c4, function(x) {x[, "Difference 20-end"]} ))
+
+ri_tvlm_c5_1_10 = unlist(sapply(ri_tvlm_c5, function(x) {x[, "Difference 1-10"]} ))
+ri_tvlm_c5_1_15 = unlist(sapply(ri_tvlm_c5, function(x) {x[, "Difference 1-15"]} ))
+ri_tvlm_c5_1_20 = unlist(sapply(ri_tvlm_c5, function(x) {x[, "Difference 1-20"]} ))
+ri_tvlm_c5_1_last = unlist(sapply(ri_tvlm_c5, function(x) {x[, "Difference 1-end"]} ))
+ri_tvlm_c5_20_last = unlist(sapply(ri_tvlm_c5, function(x) {x[, "Difference 20-end"]} ))
+
+ri_tvlm_manuf_1_10 = unlist(sapply(ri_tvlm_manuf, function(x) {x[, "Difference 1-10"]} ))
+ri_tvlm_manuf_1_15 = unlist(sapply(ri_tvlm_manuf, function(x) {x[, "Difference 1-15"]} ))
+ri_tvlm_manuf_1_20 = unlist(sapply(ri_tvlm_manuf, function(x) {x[, "Difference 1-20"]} ))
+ri_tvlm_manuf_1_last = unlist(sapply(ri_tvlm_manuf, function(x) {x[, "Difference 1-end"]} ))
+ri_tvlm_manuf_20_last = unlist(sapply(ri_tvlm_manuf, function(x) {x[, "Difference 20-end"]} ))
+
+
+boxplot(ri_tvlm_c4, horizontal = FALSE, outline = FALSE)
+boxplot(ri_tvlm_1_20, horizontal = TRUE, outline = FALSE)
+boxplot(ri_tvlm, horizontal = TRUE, outline = FALSE)
+boxplot(ri_tvlm_c5_1_10, horizontal = TRUE, outline = FALSE)
+
+boxplot(list(ri_tvlm_c1_1_10, ri_tvlm_c1_1_15, ri_tvlm_c1_1_20), horizontal = TRUE, outline = FALSE)

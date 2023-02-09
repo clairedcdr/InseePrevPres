@@ -12,6 +12,8 @@ library(forecast)
 library(dplyr)
 library(lintr)
 library(styler)
+library(shiny)
+library(dygraphs)
 
 data <- readRDS("data/data.RDS")
 data <- window(data, start = c(1992,2),
