@@ -36,6 +36,32 @@ calculate_indicateurs <- function(x) {
   return(result)
 }
 
+get_indicateurs_all_ssm <- function(x, years, ...) {
+  variables = seq_len(ncol(x[[1]]) - 1)
+  result = t(sapply(variables, get_indicateurs_variable_ssm, x = x, years = years))
+  rownames(result) = colnames(x[[1]])[- ncol(x[[1]])]
+  return(result)
+}
+
+get_indicateurs_variable_ssm <- function(x, years, variable, ...) {
+  filtering_states = lapply(x[[2]], `[[`, "filtering_states")
+  filtering_states = lapply(seq_along(filtering_states), function(i) {
+    ts(filtering_states[[i]][complete.cases(filtering_states[[i]]),], end = time(x[[1]])[i], frequency = 4)
+  })
+  var_all_date = lapply(as.numeric(years), function(date){
+    sapply(seq_along(filtering_states), function(i) {
+      window(filtering_states[[i]][, variable], start = date, end = date, extend = TRUE)
+    })
+  })
+  names(var_all_date) = years
+  are_na = sapply(var_all_date, function(x) {
+    is.na(x[length(x)])
+  })
+  var_all_date = var_all_date[!are_na]
+  var_all_date = lapply(var_all_date, na.locf)
+  colMeans(t(sapply(var_all_date, calculate_indicateurs)), na.rm = TRUE)
+}
+
 
 
 rmse_false_oos_tvlm = function(tvlm) {
