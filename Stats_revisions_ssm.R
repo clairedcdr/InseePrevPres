@@ -25,14 +25,46 @@ w = sapply(seq_along(y), function(i) {
 years = window(time(data), start = 1999.5, end = 2015)
 names(models)
 ri_ssm = sapply(ssm_lm_all_oos, get_indicateurs_all_ssm, years = years)
-ri_ssm_c1 = sapply(ssm_lm_all_oos[1:7], get_indicateurs_all_ssm, years = years) #ok
-ri_ssm_c3 = sapply(ssm_lm_all_oos[8:12], get_indicateurs_all_ssm, years = years)
-ri_ssm_c4 = sapply(ssm_lm_all_oos[13:17], get_indicateurs_all_ssm, years = years)
-ri_ssm_c5 = sapply(ssm_lm_all_oos[18:22], get_indicateurs_all_ssm, years = years)
-ri_ssm_manuf = sapply(ssm_lm_all_oos[23:25], get_indicateurs_all_ssm, years = years)
 
-get_indicateurs_all_ssm(ssm_lm_all_oos$model_c3_1, years) #ok
-get_indicateurs_all_ssm(ssm_lm_all_oos$model_c3_2, years) #ok
-ssm_lm_all_oos$model_c3_2
+ri_ssm_c1 = ri_ssm[names(ri_ssm) %in% ls(pattern = "model_c1_")]
+ri_ssm_c3 = ri_ssm[names(ri_ssm) %in% ls(pattern = "model_c3_")]
+ri_ssm_c4 = ri_ssm[names(ri_ssm) %in% ls(pattern = "model_c4_")]
+ri_ssm_c5 = ri_ssm[names(ri_ssm) %in% ls(pattern = "model_c5_")]
+ri_ssm_manuf = ri_ssm[names(ri_ssm) %in% ls(pattern = "model_manuf_")]
 
-ssm_lm_oos(model_c3_2)
+ri_ssm_1_10 = unlist(sapply(ri_ssm, function(x) {x[, "Difference 1-10"]} ))
+ri_ssm_1_15 = unlist(sapply(ri_ssm, function(x) {x[, "Difference 1-15"]} ))
+ri_ssm_1_20 = unlist(sapply(ri_ssm, function(x) {x[, "Difference 1-20"]} ))
+ri_ssm_1_last = unlist(sapply(ri_ssm, function(x) {x[, "Difference 1-end"]} ))
+ri_ssm_20_last = unlist(sapply(ri_ssm, function(x) {x[, "Difference 20-end"]} ))
+
+ri_ssm_c1_1_10 = unlist(sapply(ri_ssm_c1, function(x) {x[, "Difference 1-10"]} ))
+ri_ssm_c1_1_15 = unlist(sapply(ri_ssm_c1, function(x) {x[, "Difference 1-15"]} ))
+ri_ssm_c1_1_20 = unlist(sapply(ri_ssm_c1, function(x) {x[, "Difference 1-20"]} ))
+ri_ssm_c1_1_last = unlist(sapply(ri_ssm_c1, function(x) {x[, "Difference 1-end"]} ))
+ri_ssm_c1_20_last = unlist(sapply(ri_ssm_c1, function(x) {x[, "Difference 20-end"]} ))
+
+ri_ssm_c3_1_10 = unlist(sapply(ri_ssm_c3, function(x) {x[, "Difference 1-10"]} ))
+ri_ssm_c3_1_15 = unlist(sapply(ri_ssm_c3, function(x) {x[, "Difference 1-15"]} ))
+ri_ssm_c3_1_20 = unlist(sapply(ri_ssm_c3, function(x) {x[, "Difference 1-20"]} ))
+ri_ssm_c3_1_last = unlist(sapply(ri_ssm_c3, function(x) {x[, "Difference 1-end"]} ))
+ri_ssm_c3_20_last = unlist(sapply(ri_ssm_c3, function(x) {x[, "Difference 20-end"]} ))
+
+ri_ssm_c4_1_10 = unlist(sapply(ri_ssm_c4, function(x) {x[, "Difference 1-10"]} ))
+ri_ssm_c4_1_15 = unlist(sapply(ri_ssm_c4, function(x) {x[, "Difference 1-15"]} ))
+ri_ssm_c4_1_20 = unlist(sapply(ri_ssm_c4, function(x) {x[, "Difference 1-20"]} ))
+ri_ssm_c4_1_last = unlist(sapply(ri_ssm_c4, function(x) {x[, "Difference 1-end"]} ))
+ri_ssm_c4_20_last = unlist(sapply(ri_ssm_c4, function(x) {x[, "Difference 20-end"]} ))
+
+ri_ssm_c5_1_10 = unlist(sapply(ri_ssm_c5, function(x) {x[, "Difference 1-10"]} ))
+ri_ssm_c5_1_15 = unlist(sapply(ri_ssm_c5, function(x) {x[, "Difference 1-15"]} ))
+ri_ssm_c5_1_20 = unlist(sapply(ri_ssm_c5, function(x) {x[, "Difference 1-20"]} ))
+ri_ssm_c5_1_last = unlist(sapply(ri_ssm_c5, function(x) {x[, "Difference 1-end"]} ))
+ri_ssm_c5_20_last = unlist(sapply(ri_ssm_c5, function(x) {x[, "Difference 20-end"]} ))
+
+ri_ssm_manuf_1_10 = unlist(sapply(ri_ssm_manuf, function(x) {x[, "Difference 1-10"]} ))
+ri_ssm_manuf_1_15 = unlist(sapply(ri_ssm_manuf, function(x) {x[, "Difference 1-15"]} ))
+ri_ssm_manuf_1_20 = unlist(sapply(ri_ssm_manuf, function(x) {x[, "Difference 1-20"]} ))
+ri_ssm_manuf_1_last = unlist(sapply(ri_ssm_manuf, function(x) {x[, "Difference 1-end"]} ))
+ri_ssm_manuf_20_last = unlist(sapply(ri_ssm_manuf, function(x) {x[, "Difference 20-end"]} ))
+

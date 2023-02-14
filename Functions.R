@@ -44,13 +44,14 @@ get_indicateurs_all_ssm <- function(x, years, ...) {
 }
 
 get_indicateurs_variable_ssm <- function(x, years, variable, ...) {
-  filtering_states = lapply(x[[2]], `[[`, "filtering_states")
-  filtering_states = lapply(seq_along(filtering_states), function(i) {
-    ts(filtering_states[[i]][complete.cases(filtering_states[[i]]),], end = time(x[[1]])[i], frequency = 4)
+  smoothed_states = lapply(x[[2]], `[[`, "smoothed_states")
+  smoothed_states = smoothed_states[!is.na(lapply(smoothed_states, any))]
+  smoothed_states = lapply(seq_along(smoothed_states), function(i) {
+    ts(smoothed_states[[i]][complete.cases(smoothed_states[[i]]),], end = time(x[[1]])[i], frequency = 4)
   })
   var_all_date = lapply(as.numeric(years), function(date){
-    sapply(seq_along(filtering_states), function(i) {
-      window(filtering_states[[i]][, variable], start = date, end = date, extend = TRUE)
+    sapply(seq_along(smoothed_states), function(i) {
+      window(smoothed_states[[i]][, variable], start = date, end = date, extend = TRUE)
     })
   })
   names(var_all_date) = years
