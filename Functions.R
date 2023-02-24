@@ -45,9 +45,9 @@ get_indicateurs_all_ssm <- function(x, years, ...) {
 
 get_indicateurs_variable_ssm <- function(x, years, variable, ...) {
   smoothed_states = lapply(x[[2]], `[[`, "smoothed_states")
-  smoothed_states = smoothed_states[!is.na(lapply(smoothed_states, any))]
+  #smoothed_states = smoothed_states[!is.na(lapply(smoothed_states, any))]
   smoothed_states = lapply(seq_along(smoothed_states), function(i) {
-    ts(smoothed_states[[i]][complete.cases(smoothed_states[[i]]),], end = time(x[[1]])[i], frequency = 4)
+    ts(smoothed_states[[i]], end = time(x[[1]])[i], frequency = 4)
   })
   var_all_date = lapply(as.numeric(years), function(date){
     sapply(seq_along(smoothed_states), function(i) {
@@ -59,7 +59,7 @@ get_indicateurs_variable_ssm <- function(x, years, variable, ...) {
     is.na(x[length(x)])
   })
   var_all_date = var_all_date[!are_na]
-  var_all_date = lapply(var_all_date, na.locf)
+  var_all_date = lapply(var_all_date, zoo::na.trim)
   colMeans(t(sapply(var_all_date, calculate_indicateurs)), na.rm = TRUE)
 }
 
