@@ -15,7 +15,7 @@ test_model_variant = lapply(seq_along(model_variant), function(i) {
             date = 28)
 })
 names(test_model_variant) = names(model_variant)
-test_model_invariant = lapply(lapply(model_invariant, get_formula), rmse_prev, data = data, date = 28)
+test_model_invariant = lapply(model_invariant, rmse_prev, date = 28)
 
 test = c(test_model_invariant[1:8],
          test_model_variant[1],
