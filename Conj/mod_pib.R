@@ -266,20 +266,20 @@ mod1_ind <-dynlm::dynlm(pib ~ climat_fr_m1 + diff_climat_fr_m1 +
 coef(mod1_ind)
 coef(mod1_trunc)
 
-x= rmse_prev(mod1_ind, fixed_bw = TRUE, bw = 20)
-x$model$tvlm
-x$model$piece_tvlm
-window(x$prevision$prev_piece_tvlm$residuals, end = 2020) %>% rmse_res
-window(x$prevision$prev_piece_lm$residuals, end = 2020) %>% rmse_res
-window(x$prevision$prev_lm$residuals, end = 2020) %>% rmse_res
-window(x$prevision$prev_tvlm$residuals, end = 2020) %>% rmse_res
-x$prevision$prev_tvlm$model
-
-mod1_ind$coefficients
-mod1_ind$model
-soos_prev(mod1_ind)$residuals %>% rmse_res
-test_lm = piece_reg(mod1_ind)
-tail(test_lm$model$model, 20)
-test = piece_reg(mod1_ind, tvlm = TRUE)
-tail(test$model$coefficients, 20)
+# x= rmse_prev(mod1_ind, fixed_bw = TRUE, bw = 20)
+# x$model$tvlm
+# x$model$piece_tvlm
+# window(x$prevision$prev_piece_tvlm$residuals, end = 2020) %>% rmse_res
+# window(x$prevision$prev_piece_lm$residuals, end = 2020) %>% rmse_res
+# window(x$prevision$prev_lm$residuals, end = 2020) %>% rmse_res
+# window(x$prevision$prev_tvlm$residuals, end = 2020) %>% rmse_res
+# x$prevision$prev_tvlm$model
+#
+# mod1_ind$coefficients
+# mod1_ind$model
+# soos_prev(mod1_ind)$residuals %>% rmse_res
+# test_lm = piece_reg(mod1_ind)
+# tail(test_lm$model$model, 20)
+# test = piece_reg(mod1_ind, tvlm = TRUE)
+# tail(test$model$coefficients, 20)
 

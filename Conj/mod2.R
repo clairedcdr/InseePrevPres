@@ -3,13 +3,13 @@ data_pib <- window(data_pib, start = 2000, end = c(2022,4)
 data_pib_trunc <- ts(data_pib[!trunc(time(data_pib)) == 2020,], end = c(2022,4),frequency = 4)
 
 
-mod1 <- dynlm::dynlm(pib ~ climat_fr_m1 + diff_climat_fr_m1, data = data_pib)
-#mod2 <- dynlm::dynlm(pib ~ climat_fr_m2 + diff_climat_fr_m2, data = data_pib)
-mod3 <- dynlm::dynlm(pib ~ climat_fr_m3 + diff_climat_fr_m3, data = data_pib)
+# mod1 <- dynlm::dynlm(pib ~ climat_fr_m1 + diff_climat_fr_m1, data = data_pib)
+# mod2 <- dynlm::dynlm(pib ~ climat_fr_m2 + diff_climat_fr_m2, data = data_pib)
+# mod3 <- dynlm::dynlm(pib ~ climat_fr_m3 + diff_climat_fr_m3, data = data_pib)
 
-mod1_trunc <- dynlm::dynlm(pib ~ climat_fr_m1 + diff_climat_fr_m1, data = data_pib_trunc)
+# mod1_trunc <- dynlm::dynlm(pib ~ climat_fr_m1 + diff_climat_fr_m1, data = data_pib_trunc)
 # mod2_trunc <- dynlm::dynlm(pib ~ climat_fr_m2 + diff_climat_fr_m2, data = data_pib_trunc)
-mod3_trunc <- dynlm::dynlm(pib ~ climat_fr_m3 + diff_climat_fr_m3, data = data_pib_trunc)
+# mod3_trunc <- dynlm::dynlm(pib ~ climat_fr_m3 + diff_climat_fr_m3, data = data_pib_trunc)
 
 ind <- cbind(time(data_pib) == 2020, time(data_pib) == 2020.25, time(data_pib) == 2020.5,
              time(data_pib) == 2020.75)
@@ -44,14 +44,18 @@ mod3_cor <- dynlm::dynlm(pib3 ~ climat_fr_m3 + diff_climat_fr_m3,
                          data = data2)
 
 rmse_mod1 <- rmse_prev(mod1_cor, fixed_bw = TRUE)
-rmse_mod2 <- rmse_prev(mod3_cor, fixed_bw = TRUE)
+rmse_mod2 <- rmse_prev(mod2_cor, fixed_bw = TRUE)
 rmse_mod3 <- rmse_prev(mod3_cor, fixed_bw = TRUE)
 
 ssm_lm_best(mod1_cor)
 ssm_lm_best(mod3_cor)
 
 hansen.test(mod3_cor)
-colnames(data2)
+hansen.test(mod2_cor)
+
+rmse_var_mod2 <- rmse_prev(mod2_cor, fixed_bw = TRUE, var_fixes = fixed_coefficients(mod2_cor))
+sort(rmse_var_mod2$rmse[[1]])
+sort(rmse_var_mod2$rmse[[2]])
 
 ssm_mod1 = ssm_lm(mod1_cor, var_intercept = 0.1, var_variables = 0.1, fixed_intercept = FALSE, fixed_variables = FALSE)
 ssm_mod2 = ssm_lm(mod2_cor, var_intercept = 0.1, var_variables = 0.1, fixed_intercept = FALSE, fixed_variables = FALSE)
@@ -64,7 +68,7 @@ autoplot(mod1_cor$model[,1]) +
 
 autoplot(mod2_cor$model[,1]) +
   autolayer(mod2_cor$fitted.values, series = "lm") +
-  autolayer(ts(rmse_mod2$model$tvlm$fitted, end = end(data2), frequency = 4), series = "tvlm") +
+  autolayer(ts(rmse_mod2$model$piece_tvlm$model$fitted, end = end(data2), frequency = 4), series = "piece_tvlm") +
   autolayer(ssm_mod2$fitted[, "smoothed"], series = "ssm_lm")
 
 autoplot(mod3_cor$model[,1]) +
@@ -72,3 +76,14 @@ autoplot(mod3_cor$model[,1]) +
   autolayer(ts(rmse_mod3$model$tvlm$fitted, end = end(data2), frequency = 4), series = "tvlm") +
   autolayer(ssm_mod3$fitted[, "smoothed"], series = "ssm_lm")
 
+ssm_oos_mod1 = ssm_lm_oos(mod1_cor, var_intercept = 0.1, var_variables = 0.1, fixed_intercept = FALSE, fixed_variables = FALSE)
+ssm_oos_mod2 = ssm_lm_oos(mod2_cor, var_intercept = 0.1, var_variables = 0.1, fixed_intercept = FALSE, fixed_variables = FALSE)
+ssm_oos_mod3 = ssm_lm_oos(mod3_cor, var_intercept = 0.1, var_variables = 0.1, fixed_intercept = FALSE, fixed_variables = FALSE)
+
+autoplot(mod2_cor$model[,1]) +
+  autolayer(rmse_mod2$prevision$prev_lm$prevision, series = "lm") +
+  autolayer(rmse_mod2$prevision$prev_tvlm$prevision, series = "tvlm") +
+  autolayer(ssm_mod2$data[,1] - ssm_oos_mod2[[1]][,4], series = "ssm_lm")
+
+autoplot(mod2_cor$model[,1]) +
+autolayer(ssm_mod2$data[,1] - ssm_oos_mod2[[1]][,4], series = "ssm_lm")
