@@ -113,5 +113,91 @@ Inconvénients :
 
 -   Imprécisions dans le choix de la date
 
+## Régressions locales 
 
+Package `tvreg`
+
+Hypothèse $\beta_t = \beta(z_t)$ avec par défaut $z_t = t/T$.
+
+Et on suppose $\beta()$ localement constante (Nadaraya-Watson) ou localement linéaire.
+
+. . .
+
+Estimation :
+
+$$
+\beta(z_t) = \underset{\theta_0}{\argmin}\sum_{j=1}^T\left(y_{j}-x_j\theta_0\right)^2K_b(z_j-z_t)
+$$
+
+Avec $K_b(x)=\frac 1 b K(x/b)$ une fonction de noyau pour pondérer les observations
+
+. . .
+
+Remarque :
+
+-   Si $b\geq1$ on utilise toutes les données pour chaque estimation.
+
+-   Si $b=20$ le poids donné à toutes les données se rapproche de 1, estimation $\simeq$ à la régression linéaire
+
+-   Problème du choix de $b$ : par validation croisée mais peu discriminant
+
+------------------------------------------------------------------------
+
+Inconvénient :
+
+-   Tous les coefficients varient
+
+-   Fortes révisions possibles en temps-réel : ajout d'un point, changement de b, noyau asymétrique
+
+. . .
+
+Remarque :
+
+-   Possibilité de combiner les précédents modèles en runant une régression locale sur des données coupées selon Bai et Perron
+
+-   Grâce à des paramètres ou fonctions (comme `lm_fixed_coeff`), on peut fixer les coefficients de certaines variables. Egalement possible pour les régression par morceau.
+
+## Modèles espace-état
+
+Modélisation espace-état est une méthodologie générale qui permet de traiter un grand nombre de problèmes de séries temporelle.
+
+. . .
+
+On suppose que le problème est déterminé par une série de vecteurs *non observés* $\alpha_1,\dots,\alpha_n$ associés aux observations $y_1,\dots,y_n$, la relation entre $\alpha_t$ et $y_t$ étant spécifiée par le modèle espace-état.
+
+. . .
+
+Plusieurs formes de modèles sont possibles, les plus simples étant les modèles linéaires gaussiens. 
+Nous utilisons une version simplifiée sous la forme :
+
+. . .
+
+$$
+\begin{cases}
+y_t=X_t\alpha_t+\varepsilon_t,\quad&\varepsilon_t\sim\mathcal N(0,\sigma^2)\\
+\alpha_{t+1}=\alpha_t+\eta_t,\quad&\eta_t\sim\mathcal N(0,\sigma^2 Q)
+\end{cases},\text{ avec }\eta_t\text{ et }\varepsilon_t\text{ indépendants}
+$$
+
+avec $y_t$ de dimension $p\times 1$ vecteur des observations, et $\alpha_t$ de dimension $m \times 1$ vecteur d'états (*state vector*).
+
+------------------------------------------------------------------------
+
+La première équation est l'équation d'observation (*observation equation*) et la seconde l'équation d'état (*state equation*).
+
+. . .
+
+En principe, on peut calculer tous les paramètres par une théorie classique des lois normales multivariées mais le calcul devient vite lourd lorsque $n$ augmente. Utiliser certaines techniques permet d'estimer tous les paramètres de manière dynamique.
+
+. . .
+
+Deux opérations classiques : *filtering* et *smoothing*
+
+-   Filtering : $a_{t+1} = E[\alpha_t|Y_t]$ (proche des estimations en temps-réel)
+
+-   Smoothing : $\hat\alpha_t=E[\alpha_t|y]$ (proche des estimations dans l'échantillon)
+
+## Résultats 
+
+Quels modèles, quelle période, quelles conclusions ? 
 
