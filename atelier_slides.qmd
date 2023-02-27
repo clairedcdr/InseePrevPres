@@ -1,0 +1,117 @@
+---
+title: "Atelier du 16 mars 2023"
+subtitle: "Utilisation de modèles de régression à coefficients variant dans le temps dans le cadre de la prévision conjoncturelle"
+author: "Claire du Campe de Rosamel & Alain Quartier-la-Tente"
+format: 
+  revealjs:
+   smaller: true
+editor: visual
+---
+
+## Introduction
+
+Sur longue période, les institutions, les normes de sociétés ainsi que les comportements des agents économiques évoluent, induisant des changements dans la dynamique des séries économiques étudiées.
+
+. . .
+
+De nombreux modèles de l'Insee sont basés sur des régressions linéaires (CJO, prévisions, calage...) qui supposent que les relations entre les variables sont fixes dans le temps.
+
+. . .
+
+Hypothèse vraie sur le court-terme mais généralement fausse sur le long-terme ou en présence de changements structurels (changement de nomenclature, de définition, COVID...) 
+
+## Modèle LM
+
+L'idée générale des modèles de régression linéaire est la suivante : 
+
+$$
+\DeclareMathOperator{\argmin}{argmin}
+y_t=\beta_0+\beta_1 x_{1,t}+\dots+\beta_p x_{p,t} +\varepsilon_t 
+$$
+
+$$
+y_t=\beta X_t+\varepsilon_t
+$$
+Estimé grâce à la méthode des moindres carrés, sous les hypothèses de Gauss Markov. 
+
+. . . 
+
+On s'appuira sur un modèle simple pour illustrer la présentation. Un modèle d'estimatin du PIB grâce à deux variables explicatives : le climat des affaires et sa différence. 
+
+$$
+PIB_t = \beta_0 + \beta_1 climat\_fr_t + \beta_2 diff\_climat\_fr_t + \epsilon_t
+$$
+
+*Grahiques, et coefficients ? cf plan*
+
+## Tests statistiques 
+
+On cherche à savoir si les coefficients sont stables au cours du temps. Utilisation de deux tests :
+
+-   Bai et Perron
+
+-   Nyblom et Hansen
+
+. . .
+
+Bai et Perron (2003) : proposition d'algorithme efficace pour trouver les dates de ruptures (package `strucchange`)
+
+Mais ces tests supposent qu'il existe une date de rupture à déterminer, alors que l'on veut parfois juste savoir si les coefficients sont constants ou non.
+
+Tests trouvés dans la littérature autour de Nyblom et Hansen (1992) : implémentation de ce test dans le package `tvCoef` (`hansen.test`)
+
+------------------------------------------------------------------------
+
+Limites de Bai Perron :
+
+-   La rupture peut n'être que sur un sous-ensemble de variables, mais le test ne s'applique que sur l'ensemble d'un modèle
+
+-   Peut détecter une date de rupture là où on aurait plutôt une évolution lente dans le temps et non brutale
+
+. . .
+
+Limites de Hansen :
+
+-   Test de la l'instabilité de la variance (passer par d'autres tests)
+
+-   Test joint ne s'applique pas aux indicatrices
+
+Comme tout tests, ont leurs limites, prendre les résultats avec précaution. Ex : même si le test de Hansen ne détecte pas d'instabilité, le test de Bai et Perron peu néanmoins détecter des ruptures. 
+
+## Régressions linéaires par morceaux 
+
+Modèles les plus simples :
+
+$$
+\exists t_1,\dots,t_{T-1}:\:
+\beta_t = \beta_1\mathbb 1_{t< t_1} + \beta_2 \mathbb 1_{t_1 \leq t< t_2} + \dots + \beta_T \mathbb 1_{t_{T-1} \leq t}
+$$
+
+. . .
+
+S'estime en découpant les régresseurs ($\mathbb V[\varepsilon_t]$ fixe dans le temps) ou en faisant des régressions linéaires par morceaux ($\mathbb V[\varepsilon_t]$ varie par sous-période).
+
+Ce qui correspont à deux fonctions différentes dans le package : respectivement `piece_reg` et `bp.lms`.
+
+. . .
+
+Concentration plutôt sur `piece_reg` car donne une seule régression en sortie, contrairement à `bp.lms`.
+
+Les estimations de coefficients restent les mêmes. Les seuls changements peuvent survenir sur la variance des sous-modèles qui peut différer de la variance du modèle d'ensemble. Et sur les estimations en temps réel.
+
+------------------------------------------------------------------------
+
+Avantages :
+
+-   Simples à comprendre et à implémenter
+
+-   Facilement combinable avec d'autres types de modèles (régressions locales)
+
+Inconvénients :
+
+-   Suppose l'existence une rupture brutale
+
+-   Imprécisions dans le choix de la date
+
+
+
