@@ -85,5 +85,73 @@ autoplot(mod2_cor$model[,1]) +
   autolayer(rmse_mod2$prevision$prev_tvlm$prevision, series = "tvlm") +
   autolayer(ssm_mod2$data[,1] - ssm_oos_mod2[[1]][,4], series = "ssm_lm")
 
-autoplot(mod2_cor$model[,1]) +
-autolayer(ssm_mod2$data[,1] - ssm_oos_mod2[[1]][,4], series = "ssm_lm")
+autoplot(mod2_cor$model[,1], ylab = "") +
+autolayer(ssm_mod2$data[,1] - ssm_oos_mod2[[1]][,4], series = "ssm_lm") +
+  autolayer(ssm_mod2$fitted[, "filtering"], series = "ssm_oos")
+
+ssm_mod2$filtering_states
+ssm_mod2$fitted[, "filtering"]
+ssm_oos_mod2[[1]]
+
+
+autoplot(data2[,"pib"], ylab = "")
+ggsave("graphs_atelier/plot_pib.svg")
+
+autoplot(data2[,"pib2"], ylab = "")
+ggsave("graphs_atelier/plot_pib2.svg")
+
+autoplot(data2[,"pib"], ylab = "") +
+  autolayer(data2[,"pib2"])
+
+plot_pib = dygraph(data2[,"pib2"]) %>%
+  dyOptions(colors = "black")
+ggsave("graphs_atelier/plot_pib.svg")
+dygraphs::
+
+plot_pib_lm = dygraph(cbind(PIB = data2[, "pib2"],
+              lineaire = rmse_mod2$model$lm$fitted.values)) %>%
+  dyOptions(colors = c("black", "orange"))
+
+plot_pib_piecelm = dygraph(cbind(PIB = data2[, "pib2"],
+              morceau = rmse_mod2$model$piece_lm$model$fitted.values)) %>%
+  dyOptions(colors = c("black", "green" ))
+
+plo_pib_tvlm = dygraph(cbind(PIB = data2[, "pib2"],
+              locale = rmse_mod2$model$tvlm$fitted)) %>%
+  dyOptions(colors = c("black", "red" ))
+
+plot_pib_ssm = dygraph(cbind(PIB = data2[, "pib2"],
+              espace_etat = ssm_mod2$fitted[,"smoothed"])) %>%
+  dyOptions(colors = c("black", "purple" ))
+
+plot_global = dygraph(cbind(PIB = data2[, "pib2"],
+                             lineaire = rmse_mod2$model$lm$fitted.values,
+                             morceau = rmse_mod2$model$piece_lm$model$fitted.values,
+                             locale = rmse_mod2$model$tvlm$fitted,
+                             espace_etat = ssm_mod2$fitted[,"smoothed"])) %>%
+  dyOptions(colors = c("black", "orange", "green", "red", "purple" ))
+
+dygraph(data2[,"pib2"]) %>%
+  dyOptions(colors = "black")
+
+dygraph(cbind(PIB = data2[, "pib2"],
+              lineaire = rmse_mod2$prevision$prev_lm$prevision)) %>%
+  dyOptions(colors = c("black", "orange"))
+
+dygraph(cbind(PIB = data2[, "pib2"],
+              lineaire = rmse_mod2$prevision$prev_lm$prevision,
+              par_morceau = rmse_mod2$prevision$prev_piece_lm$prevision)) %>%
+  dyOptions(colors = c("black", "orange", "green" ))
+
+dygraph(cbind(PIB = data2[, "pib2"],
+              lineaire = rmse_mod2$prevision$prev_lm$prevision,
+              par_morceau = rmse_mod2$prevision$prev_piece_lm$prevision,
+              locale = rmse_mod2$prevision$prev_tvlm$prevision)) %>%
+  dyOptions(colors = c("black", "orange", "green", "red" ))
+
+dygraph(cbind(PIB = data2[, "pib2"],
+              lineaire = rmse_mod2$prevision$prev_lm$prevision,
+              morceau = rmse_mod2$prevision$prev_piece_lm$prevision,
+              locale = rmse_mod2$prevision$prev_tvlm$prevision,
+              espace_etat = data2[, "pib2"] - ssm_oos_mod2[[1]][,4])) %>%
+  dyOptions(colors = c("black", "orange", "green", "red", "purple" ))

@@ -348,15 +348,31 @@ y_t=\beta_0+\beta_1 x_{1,t}+\dots+\beta_p x_{p,t} +\varepsilon_t
 \]</span></p>
 <p><span class="math display">\[
 y_t=\beta X_t+\varepsilon_t
-\]</span> Estimé grâce à la méthode des moindres carrés, sous les hypothèses de Gauss Markov.</p>
+\]</span></p>
+<p>Estimé grâce à la méthode des moindres carrés, sous les hypothèses de Gauss Markov.</p>
 <div class="fragment">
-<p>On s’appuira sur un modèle simple pour illustrer la présentation. Un modèle d’estimatin du PIB grâce à deux variables explicatives : le climat des affaires et sa différence.</p>
+<p>On s’appuira sur un modèle linéaire simple pour illustrer la présentation : l’estimation du PIB grâce à deux variables explicatives : le climat des affaires et sa différence.</p>
 <p><span class="math display">\[
 PIB_t = \beta_0 + \beta_1 climat\_fr_t + \beta_2 diff\_climat\_fr_t + \epsilon_t
 \]</span></p>
-<p><em>Grahiques, et coefficients ? cf plan</em></p>
+</div>
+<div class="fragment">
+<p>Version du modèles avec des coefficients variants :</p>
+<p><span class="math display">\[
+PIB_t = \beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} diff\_climat\_fr_t + \epsilon_t
+\]</span></p>
 </div>
 </section>
+<section class="slide level2">
+
+<p>PIB avec covid</p>
+
+<img data-src="graphs_atelier/plot_pib.svg" class="r-stretch"></section>
+<section id="section" class="slide level2">
+<h2></h2>
+<p>PIB “sans” covid</p>
+
+<img data-src="graphs_atelier/plot_pib2.svg" class="r-stretch"></section>
 <section id="tests-statistiques" class="slide level2">
 <h2>Tests statistiques</h2>
 <p>On cherche à savoir si les coefficients sont stables au cours du temps. Utilisation de deux tests :</p>
@@ -383,7 +399,7 @@ PIB_t = \beta_0 + \beta_1 climat\_fr_t + \beta_2 diff\_climat\_fr_t + \epsilon_t
 <li><p>Test de la l’instabilité de la variance (passer par d’autres tests)</p></li>
 <li><p>Test joint ne s’applique pas aux indicatrices</p></li>
 </ul>
-<p>Comme tout tests, ont leurs limites, prendre les résultats avec précaution. Ex : même si le test de Hansen ne détecte pas d’instabilité, le test de Bai et Perron peu néanmoins détecter des ruptures.</p>
+<p>Comme tout test, ils ont leurs limites, prendre les résultats avec précaution. Ex : même si le test de Hansen ne détecte pas d’instabilité, le test de Bai et Perron peu néanmoins détecter des ruptures.</p>
 </div>
 </section>
 <section id="régressions-linéaires-par-morceaux" class="slide level2">
@@ -414,6 +430,98 @@ PIB_t = \beta_0 + \beta_1 climat\_fr_t + \beta_2 diff\_climat\_fr_t + \epsilon_t
 <li><p>Suppose l’existence une rupture brutale</p></li>
 <li><p>Imprécisions dans le choix de la date</p></li>
 </ul>
+<p>Dans le cas de notre modèle exemple, Bai et Perron détectent une rupture en 2011. Le modèle suivant est alors estimé :</p>
+<p><span class="math display">\[
+PIB_t = \beta_{0,t}1_{t&lt; 2011} + \beta_{0,t}1_{t \ge 2011}
++ \beta_{1,t}1_{t&lt; 2011} climat\_fr_t + \beta_{1,t}1_{t \ge 2011} climat\_fr_t +
+\\
+\beta_{2,t}1_{t &lt; 2011} diff\_climat\_fr_t + \beta_{2,t}1_{t \ge 2011} diff\_climat\_fr_t + \epsilon_t
+\]</span></p>
+</section>
+<section class="slide level2">
+
+<p>Graph fitted values piece_lm, lm,data</p>
+</section>
+<section id="régressions-locales" class="slide level2">
+<h2>Régressions locales</h2>
+<p>Package <code>tvreg</code></p>
+<p>Hypothèse <span class="math inline">\(\beta_t = \beta(z_t)\)</span> avec par défaut <span class="math inline">\(z_t = t/T\)</span>.</p>
+<p>Et on suppose <span class="math inline">\(\beta()\)</span> localement constante (Nadaraya-Watson) ou localement linéaire.</p>
+<div class="fragment">
+<p>Estimation :</p>
+<p><span class="math display">\[
+\beta(z_t) = \underset{\theta_0}{\argmin}\sum_{j=1}^T\left(y_{j}-x_j\theta_0\right)^2K_b(z_j-z_t)
+\]</span></p>
+<p>Avec <span class="math inline">\(K_b(x)=\frac 1 b K(x/b)\)</span> une fonction de noyau pour pondérer les observations.</p>
+</div>
+<div class="fragment">
+<p>Remarque :</p>
+<ul>
+<li><p>Problème du choix de <span class="math inline">\(b\)</span> : par validation croisée mais peu discriminant</p></li>
+<li><p>Si <span class="math inline">\(b\geq1\)</span> on utilise toutes les données pour chaque estimation.</p></li>
+<li><p>Si <span class="math inline">\(b=20\)</span> le poids donné à toutes les données se rapproche de 1, estimation <span class="math inline">\(\simeq\)</span> à la régression linéaire</p></li>
+</ul>
+</div>
+</section>
+<section class="slide level2">
+
+<p>Inconvénient :</p>
+<ul>
+<li><p>Tous les coefficients varient</p></li>
+<li><p>Fortes révisions possibles en temps-réel : ajout d’un point, changement de b, noyau asymétrique</p></li>
+</ul>
+<div class="fragment">
+<p>Remarque :</p>
+<ul>
+<li><p>Possibilité de combiner les précédents modèles en runant une régression locale sur des données coupées selon Bai et Perron</p></li>
+<li><p>Grâce à des paramètres ou fonctions, on peut fixer les coefficients de certaines variables. Egalement possible pour les régression par morceau.</p></li>
+</ul>
+</div>
+</section>
+<section id="modèles-espace-état" class="slide level2">
+<h2>Modèles espace-état</h2>
+<p>Modélisation espace-état est une méthodologie générale qui permet de traiter un grand nombre de problèmes de séries temporelle.</p>
+<div class="fragment">
+<p>On suppose que le problème est déterminé par une série de vecteurs <em>non observés</em> <span class="math inline">\(\alpha_1,\dots,\alpha_n\)</span> associés aux observations <span class="math inline">\(y_1,\dots,y_n\)</span>, la relation entre <span class="math inline">\(\alpha_t\)</span> et <span class="math inline">\(y_t\)</span> étant spécifiée par le modèle espace-état.</p>
+</div>
+<div class="fragment">
+<p>Plusieurs formes de modèles sont possibles, les plus simples étant les modèles linéaires gaussiens. Nous utilisons une version simplifiée sous la forme :</p>
+</div>
+<div class="fragment">
+<p><span class="math display">\[
+\begin{cases}
+y_t=X_t\alpha_t+\varepsilon_t,\quad&amp;\varepsilon_t\sim\mathcal N(0,\sigma^2)\\
+\alpha_{t+1}=\alpha_t+\eta_t,\quad&amp;\eta_t\sim\mathcal N(0,\sigma^2 Q)
+\end{cases},\text{ avec }\eta_t\text{ et }\varepsilon_t\text{ indépendants}
+\]</span></p>
+<p>avec <span class="math inline">\(y_t\)</span> de dimension <span class="math inline">\(p\times 1\)</span> vecteur des observations, et <span class="math inline">\(\alpha_t\)</span> de dimension <span class="math inline">\(m \times 1\)</span> vecteur d’états (<em>state vector</em>). Et <span class="math inline">\(\sigma^2\)</span> un facteur simplifiant les estimations.</p>
+</div>
+<div class="fragment">
+<p>La première équation est l’équation d’observation (<em>observation equation</em>) et la seconde l’équation d’état (<em>state equation</em>).</p>
+</div>
+</section>
+<section class="slide level2">
+
+<p>Pour simplifier les calculs et les rendre plus rapide (sutout en présence de beaucoup de données), cette méthode utilise certaines techniques permettant d’estimer tous les paramètres de manière dynamique, comme le filtre de Kalman.</p>
+<div class="fragment">
+<p>Deux opérations classiques : <em>filtering</em> et <em>smoothing</em></p>
+<ul>
+<li>Filtering : estime le coefficient suivant (en <span class="math inline">\(t+1\)</span>) avec les informations connues en t. Ce qui est proche des estimations en temps-réel.</li>
+</ul>
+<p><span class="math display">\[
+a_{t+1} = E[\alpha_t|Y_t]
+\]</span></p>
+<ul>
+<li>Smoothing : estime le coefficient à chaque date grâce à toute l’information disponible. Ce qui est proche des estimations dans l’échantillon.</li>
+</ul>
+<p><span class="math display">\[
+\hat\alpha_t=E[\alpha_t|y]
+\]</span></p>
+</div>
+</section>
+<section id="résultats" class="slide level2">
+<h2>Résultats</h2>
+<p>Quels modèles, quelle période, quelles conclusions ?</p>
 <div class="footer footer-default">
 
 </div>

@@ -18,11 +18,11 @@ De nombreux modèles de l'Insee sont basés sur des régressions linéaires (CJO
 
 . . .
 
-Hypothèse vraie sur le court-terme mais généralement fausse sur le long-terme ou en présence de changements structurels (changement de nomenclature, de définition, COVID...) 
+Hypothèse vraie sur le court-terme mais généralement fausse sur le long-terme ou en présence de changements structurels (changement de nomenclature, de définition, COVID...)
 
 ## Modèle LM
 
-L'idée générale des modèles de régression linéaire est la suivante : 
+L'idée générale des modèles de régression linéaire est la suivante :
 
 $$
 \DeclareMathOperator{\argmin}{argmin}
@@ -31,20 +31,40 @@ $$
 
 $$
 y_t=\beta X_t+\varepsilon_t
-$$
-Estimé grâce à la méthode des moindres carrés, sous les hypothèses de Gauss Markov. 
+$$ 
 
-. . . 
+Estimé grâce à la méthode des moindres carrés, sous les hypothèses de Gauss Markov.
 
-On s'appuira sur un modèle simple pour illustrer la présentation. Un modèle d'estimatin du PIB grâce à deux variables explicatives : le climat des affaires et sa différence. 
+. . .
+
+On s'appuira sur un modèle linéaire simple pour illustrer la présentation : l'estimation du PIB grâce à deux variables explicatives : le climat des affaires et sa différence.
 
 $$
 PIB_t = \beta_0 + \beta_1 climat\_fr_t + \beta_2 diff\_climat\_fr_t + \epsilon_t
 $$
 
-*Grahiques, et coefficients ? cf plan*
+. . . 
 
-## Tests statistiques 
+Version du modèles avec des coefficients variants :
+
+$$
+PIB_t = \beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} diff\_climat\_fr_t + \epsilon_t
+$$
+
+--------------
+
+PIB avec covid
+
+![](graphs_atelier/plot_pib.svg)
+
+
+##
+
+PIB "sans" covid
+
+![](graphs_atelier/plot_pib2.svg)
+
+## Tests statistiques
 
 On cherche à savoir si les coefficients sont stables au cours du temps. Utilisation de deux tests :
 
@@ -76,9 +96,9 @@ Limites de Hansen :
 
 -   Test joint ne s'applique pas aux indicatrices
 
-Comme tout tests, ont leurs limites, prendre les résultats avec précaution. Ex : même si le test de Hansen ne détecte pas d'instabilité, le test de Bai et Perron peu néanmoins détecter des ruptures. 
+Comme tout test, ils ont leurs limites, prendre les résultats avec précaution. Ex : même si le test de Hansen ne détecte pas d'instabilité, le test de Bai et Perron peu néanmoins détecter des ruptures.
 
-## Régressions linéaires par morceaux 
+## Régressions linéaires par morceaux
 
 Modèles les plus simples :
 
@@ -113,7 +133,22 @@ Inconvénients :
 
 -   Imprécisions dans le choix de la date
 
-## Régressions locales 
+
+Dans le cas de notre modèle exemple, Bai et Perron détectent une rupture en 2011. Le modèle suivant est alors estimé :
+
+$$
+PIB_t = \beta_{0,t}1_{t< 2011} + \beta_{0,t}1_{t \ge 2011} 
++ \beta_{1,t}1_{t< 2011} climat\_fr_t + \beta_{1,t}1_{t \ge 2011} climat\_fr_t + 
+\\
+\beta_{2,t}1_{t < 2011} diff\_climat\_fr_t + \beta_{2,t}1_{t \ge 2011} diff\_climat\_fr_t + \epsilon_t 
+$$
+
+----------
+
+Graph fitted values piece_lm, lm,data
+
+
+## Régressions locales
 
 Package `tvreg`
 
@@ -129,17 +164,18 @@ $$
 \beta(z_t) = \underset{\theta_0}{\argmin}\sum_{j=1}^T\left(y_{j}-x_j\theta_0\right)^2K_b(z_j-z_t)
 $$
 
-Avec $K_b(x)=\frac 1 b K(x/b)$ une fonction de noyau pour pondérer les observations
+Avec $K_b(x)=\frac 1 b K(x/b)$ une fonction de noyau pour pondérer les observations. 
 
 . . .
 
 Remarque :
 
+-   Problème du choix de $b$ : par validation croisée mais peu discriminant
+
 -   Si $b\geq1$ on utilise toutes les données pour chaque estimation.
 
 -   Si $b=20$ le poids donné à toutes les données se rapproche de 1, estimation $\simeq$ à la régression linéaire
 
--   Problème du choix de $b$ : par validation croisée mais peu discriminant
 
 ------------------------------------------------------------------------
 
@@ -155,7 +191,7 @@ Remarque :
 
 -   Possibilité de combiner les précédents modèles en runant une régression locale sur des données coupées selon Bai et Perron
 
--   Grâce à des paramètres ou fonctions (comme `lm_fixed_coeff`), on peut fixer les coefficients de certaines variables. Egalement possible pour les régression par morceau.
+-   Grâce à des paramètres ou fonctions, on peut fixer les coefficients de certaines variables. Egalement possible pour les régression par morceau.
 
 ## Modèles espace-état
 
@@ -167,8 +203,7 @@ On suppose que le problème est déterminé par une série de vecteurs *non obse
 
 . . .
 
-Plusieurs formes de modèles sont possibles, les plus simples étant les modèles linéaires gaussiens. 
-Nous utilisons une version simplifiée sous la forme :
+Plusieurs formes de modèles sont possibles, les plus simples étant les modèles linéaires gaussiens. Nous utilisons une version simplifiée sous la forme :
 
 . . .
 
@@ -179,25 +214,32 @@ y_t=X_t\alpha_t+\varepsilon_t,\quad&\varepsilon_t\sim\mathcal N(0,\sigma^2)\\
 \end{cases},\text{ avec }\eta_t\text{ et }\varepsilon_t\text{ indépendants}
 $$
 
-avec $y_t$ de dimension $p\times 1$ vecteur des observations, et $\alpha_t$ de dimension $m \times 1$ vecteur d'états (*state vector*).
-
-------------------------------------------------------------------------
-
-La première équation est l'équation d'observation (*observation equation*) et la seconde l'équation d'état (*state equation*).
+avec $y_t$ de dimension $p\times 1$ vecteur des observations, et $\alpha_t$ de dimension $m \times 1$ vecteur d'états (*state vector*). Et $\sigma^2$ un facteur simplifiant les estimations.
 
 . . .
 
-En principe, on peut calculer tous les paramètres par une théorie classique des lois normales multivariées mais le calcul devient vite lourd lorsque $n$ augmente. Utiliser certaines techniques permet d'estimer tous les paramètres de manière dynamique.
+La première équation est l'équation d'observation (*observation equation*) et la seconde l'équation d'état (*state equation*).
+
+--------------
+
+Pour simplifier les calculs et les rendre plus rapide (sutout en présence de beaucoup de données), cette méthode utilise certaines techniques permettant d'estimer tous les paramètres de manière dynamique, comme le filtre de Kalman.
 
 . . .
 
 Deux opérations classiques : *filtering* et *smoothing*
 
--   Filtering : $a_{t+1} = E[\alpha_t|Y_t]$ (proche des estimations en temps-réel)
+-   Filtering : estime le coefficient suivant (en $t+1$) avec les informations connues en t. Ce qui est proche des estimations en temps-réel.
 
--   Smoothing : $\hat\alpha_t=E[\alpha_t|y]$ (proche des estimations dans l'échantillon)
+$$
+a_{t+1} = E[\alpha_t|Y_t]
+$$
 
-## Résultats 
+-   Smoothing : estime le coefficient à chaque date grâce à toute l'information disponible. Ce qui est proche des estimations dans l'échantillon.
 
-Quels modèles, quelle période, quelles conclusions ? 
+$$
+\hat\alpha_t=E[\alpha_t|y]
+$$
 
+## Résultats
+
+Quels modèles, quelle période, quelles conclusions ?
