@@ -20,7 +20,7 @@ De nombreux modèles de l'Insee sont basés sur des régressions linéaires (CJO
 
 Hypothèse vraie sur le court-terme mais généralement fausse sur le long-terme ou en présence de changements structurels (changement de nomenclature, de définition, COVID...)
 
-## Modèle LM
+## Modèle de régression linéaire 
 
 L'idée générale des modèles de régression linéaire est la suivante :
 
@@ -37,7 +37,7 @@ Estimé grâce à la méthode des moindres carrés, sous les hypothèses de Gaus
 
 . . .
 
-On s'appuira sur un modèle linéaire simple pour illustrer la présentation : l'estimation du PIB grâce à deux variables explicatives : le climat des affaires et sa différence.
+On s'appuira sur un modèle linéaire simple pour illustrer la présentation : l'estimation du PIB grâce à deux variables explicatives, le climat des affaires et sa différence.
 
 $$
 PIB_t = \beta_0 + \beta_1 climat\_fr_t + \beta_2 diff\_climat\_fr_t + \epsilon_t
@@ -51,18 +51,16 @@ $$
 PIB_t = \beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} diff\_climat\_fr_t + \epsilon_t
 $$
 
---------------
+##
 
 PIB avec covid
 
 ![](graphs_atelier/plot_pib.svg)
-
-
 ##
 
-PIB "sans" covid
+Fitted lm
 
-![](graphs_atelier/plot_pib2.svg)
+![](graphs_atelier/plot_lm.svg)
 
 ## Tests statistiques
 
@@ -143,9 +141,11 @@ PIB_t = \beta_{0,t}1_{t< 2011} + \beta_{0,t}1_{t \ge 2011}
 \beta_{2,t}1_{t < 2011} diff\_climat\_fr_t + \beta_{2,t}1_{t \ge 2011} diff\_climat\_fr_t + \epsilon_t 
 $$
 
-----------
+----
 
-Graph fitted values piece_lm, lm,data
+Fitted piecelm
+
+![](graphs_atelier/plot_piecelm.svg)
 
 
 ## Régressions locales
@@ -193,6 +193,12 @@ Remarque :
 
 -   Grâce à des paramètres ou fonctions, on peut fixer les coefficients de certaines variables. Egalement possible pour les régression par morceau.
 
+----
+
+Fitted tvlm
+
+![](graphs_atelier/plot_tvlm.svg)
+
 ## Modèles espace-état
 
 Modélisation espace-état est une méthodologie générale qui permet de traiter un grand nombre de problèmes de séries temporelle.
@@ -239,6 +245,12 @@ $$
 $$
 \hat\alpha_t=E[\alpha_t|y]
 $$
+
+----
+
+Fitted ssm
+
+![](graphs_atelier/plot_ssm.svg)
 
 ## Résultats
 

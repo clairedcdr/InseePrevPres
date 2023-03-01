@@ -20,7 +20,7 @@ colnames(data2) <- c(colnames(data_pib), sprintf("ind2020Q%i", 1:4))
 mod1_ind <-dynlm::dynlm(pib ~ climat_fr_m1 + diff_climat_fr_m1 +
                           ind2020Q1 + ind2020Q2 + ind2020Q3 + ind2020Q4,
                         data = data2)
-mod2_ind <-dynlm::dynlm(pib ~ climat_fr_m3 + diff_climat_fr_m3 +
+mod2_ind <-dynlm::dynlm(pib ~ climat_fr_m2 + diff_climat_fr_m2 +
                           ind2020Q1 + ind2020Q2 + ind2020Q3 + ind2020Q4,
                         data = data2)
 mod3_ind <-dynlm::dynlm(pib ~ climat_fr_m3 + diff_climat_fr_m3 +
@@ -44,7 +44,7 @@ mod3_cor <- dynlm::dynlm(pib3 ~ climat_fr_m3 + diff_climat_fr_m3,
                          data = data2)
 
 rmse_mod1 <- rmse_prev(mod1_cor, fixed_bw = TRUE)
-rmse_mod2 <- rmse_prev(mod2_cor, fixed_bw = TRUE)
+rmse_mod2 <- rmse_prev(mod2_cor)
 rmse_mod3 <- rmse_prev(mod3_cor, fixed_bw = TRUE)
 
 ssm_lm_best(mod1_cor)
@@ -94,60 +94,19 @@ ssm_mod2$fitted[, "filtering"]
 ssm_oos_mod2[[1]]
 
 
-autoplot(data2[,"pib"], ylab = "")
+plot_pib = autoplot(data2[,"pib"], ylab = "")
 ggsave("graphs_atelier/plot_pib.svg")
 
-autoplot(data2[,"pib2"], ylab = "")
+plot_pib2 = autoplot(data2[,"pib2"], ylab = "")
 ggsave("graphs_atelier/plot_pib2.svg")
 
-autoplot(data2[,"pib"], ylab = "") +
+plot_pib_pib2 = autoplot(data2[,"pib"], ylab = "") +
   autolayer(data2[,"pib2"])
+ggsave("graphs_atelier/plot_pib_pib2.svg")
 
-plot_pib = dygraph(data2[,"pib2"]) %>%
-  dyOptions(colors = "black")
-ggsave("graphs_atelier/plot_pib.svg")
-dygraphs::
+plot_pib_lm = autoplot(data2[,"pib2"], ylab = "") +
+  autolayer(mod2_cor$fitted.values)
 
-plot_pib_lm = dygraph(cbind(PIB = data2[, "pib2"],
-              lineaire = rmse_mod2$model$lm$fitted.values)) %>%
-  dyOptions(colors = c("black", "orange"))
-
-plot_pib_piecelm = dygraph(cbind(PIB = data2[, "pib2"],
-              morceau = rmse_mod2$model$piece_lm$model$fitted.values)) %>%
-  dyOptions(colors = c("black", "green" ))
-
-plo_pib_tvlm = dygraph(cbind(PIB = data2[, "pib2"],
-              locale = rmse_mod2$model$tvlm$fitted)) %>%
-  dyOptions(colors = c("black", "red" ))
-
-plot_pib_ssm = dygraph(cbind(PIB = data2[, "pib2"],
-              espace_etat = ssm_mod2$fitted[,"smoothed"])) %>%
-  dyOptions(colors = c("black", "purple" ))
-
-plot_global = dygraph(cbind(PIB = data2[, "pib2"],
-                             lineaire = rmse_mod2$model$lm$fitted.values,
-                             morceau = rmse_mod2$model$piece_lm$model$fitted.values,
-                             locale = rmse_mod2$model$tvlm$fitted,
-                             espace_etat = ssm_mod2$fitted[,"smoothed"])) %>%
-  dyOptions(colors = c("black", "orange", "green", "red", "purple" ))
-
-dygraph(data2[,"pib2"]) %>%
-  dyOptions(colors = "black")
-
-dygraph(cbind(PIB = data2[, "pib2"],
-              lineaire = rmse_mod2$prevision$prev_lm$prevision)) %>%
-  dyOptions(colors = c("black", "orange"))
-
-dygraph(cbind(PIB = data2[, "pib2"],
-              lineaire = rmse_mod2$prevision$prev_lm$prevision,
-              par_morceau = rmse_mod2$prevision$prev_piece_lm$prevision)) %>%
-  dyOptions(colors = c("black", "orange", "green" ))
-
-dygraph(cbind(PIB = data2[, "pib2"],
-              lineaire = rmse_mod2$prevision$prev_lm$prevision,
-              par_morceau = rmse_mod2$prevision$prev_piece_lm$prevision,
-              locale = rmse_mod2$prevision$prev_tvlm$prevision)) %>%
-  dyOptions(colors = c("black", "orange", "green", "red" ))
 
 dygraph(cbind(PIB = data2[, "pib2"],
               lineaire = rmse_mod2$prevision$prev_lm$prevision,

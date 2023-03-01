@@ -339,8 +339,8 @@
 <p>Hypothèse vraie sur le court-terme mais généralement fausse sur le long-terme ou en présence de changements structurels (changement de nomenclature, de définition, COVID…)</p>
 </div>
 </section>
-<section id="modèle-lm" class="slide level2">
-<h2>Modèle LM</h2>
+<section id="modèle-de-régression-linéaire" class="slide level2">
+<h2>Modèle de régression linéaire</h2>
 <p>L’idée générale des modèles de régression linéaire est la suivante :</p>
 <p><span class="math display">\[
 \DeclareMathOperator{\argmin}{argmin}
@@ -351,7 +351,7 @@ y_t=\beta X_t+\varepsilon_t
 \]</span></p>
 <p>Estimé grâce à la méthode des moindres carrés, sous les hypothèses de Gauss Markov.</p>
 <div class="fragment">
-<p>On s’appuira sur un modèle linéaire simple pour illustrer la présentation : l’estimation du PIB grâce à deux variables explicatives : le climat des affaires et sa différence.</p>
+<p>On s’appuira sur un modèle linéaire simple pour illustrer la présentation : l’estimation du PIB grâce à deux variables explicatives, le climat des affaires et sa différence.</p>
 <p><span class="math display">\[
 PIB_t = \beta_0 + \beta_1 climat\_fr_t + \beta_2 diff\_climat\_fr_t + \epsilon_t
 \]</span></p>
@@ -366,13 +366,12 @@ PIB_t = \beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} diff\_climat\_fr_t 
 <section class="slide level2">
 
 <p>PIB avec covid</p>
-
-<img data-src="graphs_atelier/plot_pib.svg" class="r-stretch"></section>
+</section>
 <section id="section" class="slide level2">
-<h2></h2>
-<p>PIB “sans” covid</p>
-
-<img data-src="graphs_atelier/plot_pib2.svg" class="r-stretch"></section>
+<h2><img data-src="graphs_atelier/plot_pib.svg"></h2>
+<p>Fitted lm</p>
+<p><img data-src="graphs_atelier/plot_lm.svg"></p>
+</section>
 <section id="tests-statistiques" class="slide level2">
 <h2>Tests statistiques</h2>
 <p>On cherche à savoir si les coefficients sont stables au cours du temps. Utilisation de deux tests :</p>
@@ -440,8 +439,9 @@ PIB_t = \beta_{0,t}1_{t&lt; 2011} + \beta_{0,t}1_{t \ge 2011}
 </section>
 <section class="slide level2">
 
-<p>Graph fitted values piece_lm, lm,data</p>
-</section>
+<p>Fitted piecelm</p>
+
+<img data-src="graphs_atelier/plot_piecelm.svg" class="r-stretch"></section>
 <section id="régressions-locales" class="slide level2">
 <h2>Régressions locales</h2>
 <p>Package <code>tvreg</code></p>
@@ -478,6 +478,11 @@ PIB_t = \beta_{0,t}1_{t&lt; 2011} + \beta_{0,t}1_{t \ge 2011}
 </ul>
 </div>
 </section>
+<section class="slide level2">
+
+<p>Fitted tvlm</p>
+
+<img data-src="graphs_atelier/plot_tvlm.svg" class="r-stretch"></section>
 <section id="modèles-espace-état" class="slide level2">
 <h2>Modèles espace-état</h2>
 <p>Modélisation espace-état est une méthodologie générale qui permet de traiter un grand nombre de problèmes de séries temporelle.</p>
@@ -519,6 +524,11 @@ a_{t+1} = E[\alpha_t|Y_t]
 \]</span></p>
 </div>
 </section>
+<section class="slide level2">
+
+<p>Fitted ssm</p>
+
+<img data-src="graphs_atelier/plot_ssm.svg" class="r-stretch"></section>
 <section id="résultats" class="slide level2">
 <h2>Résultats</h2>
 <p>Quels modèles, quelle période, quelles conclusions ?</p>
