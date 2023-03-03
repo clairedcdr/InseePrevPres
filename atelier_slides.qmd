@@ -1,10 +1,16 @@
 ---
 title: "Atelier du 16 mars 2023"
 subtitle: "Utilisation de modèles de régression à coefficients variant dans le temps dans le cadre de la prévision conjoncturelle"
-author: "Claire du Campe de Rosamel & Alain Quartier-la-Tente"
+author:
+- Claire du Campe de Rosamel
+# TODO : PSE ?
+- Alain Quartier-la-Tente
+# TODO : logos
 format: 
   revealjs:
    smaller: true
+   theme: default
+   css: css/template.css
 editor: visual
 ---
 
@@ -20,7 +26,7 @@ De nombreux modèles de l'Insee sont basés sur des régressions linéaires (CJO
 
 Hypothèse vraie sur le court-terme mais généralement fausse sur le long-terme ou en présence de changements structurels (changement de nomenclature, de définition, COVID...)
 
-## Modèle de régression linéaire 
+## Modèle de régression linéaire
 
 L'idée générale des modèles de régression linéaire est la suivante :
 
@@ -31,9 +37,9 @@ $$
 
 $$
 y_t=\beta X_t+\varepsilon_t
-$$ 
+$$
 
-Estimé grâce à la méthode des moindres carrés, sous les hypothèses de Gauss Markov.
+Estimé grâce à la méthode des moindres carrés, (sous les hypothèses de Gauss Markov).
 
 . . .
 
@@ -43,7 +49,15 @@ $$
 PIB_t = \beta_0 + \beta_1 climat\_fr_t + \beta_2 diff\_climat\_fr_t + \epsilon_t
 $$
 
-. . . 
+## TODO
+
+-   parler de la période d'estimation
+
+-   ajouter les coefficients estimés dans la formule de la régression
+
+-   Comment évaluer la qualité des modèles
+
+-   TODO à la fin parler de la suite avec modèle général
 
 Version du modèles avec des coefficients variants :
 
@@ -51,40 +65,75 @@ $$
 PIB_t = \beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} diff\_climat\_fr_t + \epsilon_t
 $$
 
-##
+## 
 
-PIB avec covid
+toto
 
-![](graphs_atelier/plot_pib.svg)
-##
+```{r}
+library(dygraphs)
+readRDS("graphs_atelier/plot_pib.RDS")
+```
 
-Fitted lm
+## 
 
-![](graphs_atelier/plot_lm.svg)
+```{r}
+readRDS("graphs_atelier/plot_lm.RDS")
+```
 
 ## Tests statistiques
 
 On cherche à savoir si les coefficients sont stables au cours du temps. Utilisation de deux tests :
 
--   Bai et Perron
+-   **Bai et Perron (2003)** 
 
--   Nyblom et Hansen
+S'appui lui même sur le test de Chow. Propose un algorithme efficace pour trouver les dates de ruptures (package `strucchange`). 
 
-. . .
+Test si ...  
 
-Bai et Perron (2003) : proposition d'algorithme efficace pour trouver les dates de ruptures (package `strucchange`)
+$$
+PIB_t = \beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} diff\_climat\_fr_t + \epsilon_t
+$$
 
 Mais ces tests supposent qu'il existe une date de rupture à déterminer, alors que l'on veut parfois juste savoir si les coefficients sont constants ou non.
 
-Tests trouvés dans la littérature autour de Nyblom et Hansen (1992) : implémentation de ce test dans le package `tvCoef` (`hansen.test`)
-
-------------------------------------------------------------------------
+. . . 
 
 Limites de Bai Perron :
 
 -   La rupture peut n'être que sur un sous-ensemble de variables, mais le test ne s'applique que sur l'ensemble d'un modèle
 
+TODO : mettre formule
+
+On teste : $$
+PIB_t = (\beta_{0} + \beta_{1} climat\_fr_t + \beta_{2} diff\_climat\_fr_t) \mathbb 1_{t < t_1} + 
+ (\beta_{0}' + \beta_{1}' climat\_fr_t + \beta_{2}' diff\_climat\_fr_t)\mathbb 1_{t\geq t_1} +
+\epsilon_t
+$$
+
+On ne peut pas tester :
+
+$$
+PIB_t = \beta_{0} + \beta_{1} climat\_fr_t + (\beta_{2} \mathbb 1_{t < t_1}+ \beta_{2}' \mathbb 1_{t\geq t_1})\Delta climat\_fr_t +
+\epsilon_t
+$$
+
+Fin TODO
+
 -   Peut détecter une date de rupture là où on aurait plutôt une évolution lente dans le temps et non brutale
+
+-   **Nyblom et Hansen**
+
+. . .
+
+
+
+Tests trouvés dans la littérature autour de Nyblom et Hansen (1992) : implémentation de ce test dans le package `tvCoef` (`hansen.test`)
+
+TODO ALAIN : hypothèses de test sur Hansen
+
+------------------------------------------------------------------------
+
+
 
 . . .
 
@@ -131,22 +180,28 @@ Inconvénients :
 
 -   Imprécisions dans le choix de la date
 
+. . .
 
-Dans le cas de notre modèle exemple, Bai et Perron détectent une rupture en 2011. Le modèle suivant est alors estimé :
+Dans le cas de notre modèle exemple, Bai et Perron détectent une rupture en 2019. Le modèle suivant est alors estimé :
 
 $$
-PIB_t = \beta_{0,t}1_{t< 2011} + \beta_{0,t}1_{t \ge 2011} 
-+ \beta_{1,t}1_{t< 2011} climat\_fr_t + \beta_{1,t}1_{t \ge 2011} climat\_fr_t + 
+PIB_t = \beta_{0,t}1_{t< 2019} + \beta_{0,t}1_{t \ge 2019} 
++ \beta_{1,t}1_{t< 2019} climat\_fr_t + \beta_{1,t}1_{t \ge 2019} climat\_fr_t + 
 \\
-\beta_{2,t}1_{t < 2011} diff\_climat\_fr_t + \beta_{2,t}1_{t \ge 2011} diff\_climat\_fr_t + \epsilon_t 
+\beta_{2,t}1_{t < 2019} diff\_climat\_fr_t + \beta_{2,t}1_{t \ge 2019} diff\_climat\_fr_t + \epsilon_t 
 $$
 
-----
+------------------------------------------------------------------------
 
-Fitted piecelm
+```{r}
+readRDS("graphs_atelier/plot_piecelm.RDS")
+```
 
-![](graphs_atelier/plot_piecelm.svg)
+## 
 
+```{r}
+readRDS("graphs_atelier/oos_piecelm.RDS")
+```
 
 ## Régressions locales
 
@@ -164,7 +219,7 @@ $$
 \beta(z_t) = \underset{\theta_0}{\argmin}\sum_{j=1}^T\left(y_{j}-x_j\theta_0\right)^2K_b(z_j-z_t)
 $$
 
-Avec $K_b(x)=\frac 1 b K(x/b)$ une fonction de noyau pour pondérer les observations. 
+Avec $K_b(x)=\frac 1 b K(x/b)$ une fonction de noyau pour pondérer les observations.
 
 . . .
 
@@ -175,7 +230,6 @@ Remarque :
 -   Si $b\geq1$ on utilise toutes les données pour chaque estimation.
 
 -   Si $b=20$ le poids donné à toutes les données se rapproche de 1, estimation $\simeq$ à la régression linéaire
-
 
 ------------------------------------------------------------------------
 
@@ -193,11 +247,17 @@ Remarque :
 
 -   Grâce à des paramètres ou fonctions, on peut fixer les coefficients de certaines variables. Egalement possible pour les régression par morceau.
 
-----
+------------------------------------------------------------------------
 
-Fitted tvlm
+```{r}
+readRDS("graphs_atelier/plot_tvlm.RDS")
+```
 
-![](graphs_atelier/plot_tvlm.svg)
+## 
+
+```{r}
+readRDS("graphs_atelier/oos_tvlm.RDS")
+```
 
 ## Modèles espace-état
 
@@ -226,7 +286,7 @@ avec $y_t$ de dimension $p\times 1$ vecteur des observations, et $\alpha_t$ de d
 
 La première équation est l'équation d'observation (*observation equation*) et la seconde l'équation d'état (*state equation*).
 
---------------
+------------------------------------------------------------------------
 
 Pour simplifier les calculs et les rendre plus rapide (sutout en présence de beaucoup de données), cette méthode utilise certaines techniques permettant d'estimer tous les paramètres de manière dynamique, comme le filtre de Kalman.
 
@@ -234,23 +294,29 @@ Pour simplifier les calculs et les rendre plus rapide (sutout en présence de be
 
 Deux opérations classiques : *filtering* et *smoothing*
 
--   Filtering : estime le coefficient suivant (en $t+1$) avec les informations connues en t. Ce qui est proche des estimations en temps-réel.
-
-$$
-a_{t+1} = E[\alpha_t|Y_t]
-$$
-
 -   Smoothing : estime le coefficient à chaque date grâce à toute l'information disponible. Ce qui est proche des estimations dans l'échantillon.
 
 $$
-\hat\alpha_t=E[\alpha_t|y]
+\hat\alpha_t = E[\alpha_t|y_0, \dots, y_n]
 $$
 
-----
+-   Filtering : estime le coefficient suivant (en $t+1$) avec les informations connues en t. Ce qui est proche des estimations en temps-réel.
 
-Fitted ssm
+$$
+a_{t+1} = E[\alpha_t|y_0, \dots, y_t]
+$$
 
-![](graphs_atelier/plot_ssm.svg)
+------------------------------------------------------------------------
+
+```{r}
+readRDS("graphs_atelier/plot_ssm.RDS")
+```
+
+## 
+
+```{r}
+readRDS("graphs_atelier/oos_ssm.RDS")
+```
 
 ## Résultats
 

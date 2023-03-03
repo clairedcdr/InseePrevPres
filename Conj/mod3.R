@@ -19,14 +19,14 @@ dygraph(cbind(PIB = data2[,"pib"],
 test3 = ssm_lm_oos(mod3,  var_intercept = 0.1, var_variables = 0.1, fixed_intercept = FALSE, fixed_variables = FALSE)
 
 dygraph(cbind(PIB = data2[,"pib"],
-              ssm = data2[,"pib"]- test3[[1]][,"noise"]))%>%
+              ssm = test3$prevision))%>%
   dyOptions(colors = c("black", "purple" ))
 
 dygraph(cbind(PIB = data2[,"pib"],
               lm = test$prevision$prev_lm$prevision,
               piecelm = test$prevision$prev_piece_lm$prevision,
               tvlm = test$prevision$prev_tvlm$prevision,
-              ssm = data2[,"pib"]- test3[[1]][,"noise"]))%>%
+              ssm = test3$prevision))%>%
   dyOptions(colors = c("black", "orange", "green", "red", "purple" ))
 
 
@@ -78,7 +78,7 @@ data_plot2 = as.data.frame(cbind(time(data2),
                        test$prevision$prev_lm$prevision,
                        test$prevision$prev_piece_lm$prevision,
                        test$prevision$prev_tvlm$prevision,
-                       data2[, "pib"] - test3[[1]][, "noise"]))
+                       test3$prevision))
 colnames(data_plot2) = c("Time", "PIB", "lm", "piecelm", "tvlm", "ssm")
 
 oos_lm = ggplot(data_plot2, aes(Time, PIB)) +
@@ -107,3 +107,6 @@ oos_ssm = ggplot(data_plot2, aes(Time, PIB)) +
   geom_line(aes(,ssm), color = "purple") +
   theme_minimal()
 ggsave("graphs_atelier/oos_ssm.svg", plot = oos_ssm, height = 20, width = 40, units = "cm")
+
+
+plot(cbind(data_plot$PIB, test$prevision$prev_piece_tvlm$prevision), plot.type = "s", col = c("black", "red"))
