@@ -17,26 +17,20 @@ mod1_2019 <- dynlm::dynlm(pib ~ climat_fr_m1 + diff_climat_fr_m1, data = data_pi
 mod2_2019 <- dynlm::dynlm(pib ~ climat_fr_m2 + diff_climat_fr_m2, data = data_pib_2019)
 mod3_2019 <- dynlm::dynlm(pib ~ climat_fr_m3 + diff_climat_fr_m3, data = data_pib_2019)
 
+sum = summary(mod2_2019)$coefficients
+x = printCoefmat(sum)
+saveRDS(sum, file = "summary.RDS")
+
+hansen.test(mod2_2019)
+
 test = rmse_prev(mod2_2019, fixed_bw = TRUE)
+
+piecereg = piece_reg(mod2_2019, break_dates = 2011.25)
+soos_piece = soos_prev(piecereg)
 
 test2 = ssm_lm(mod2_2019, var_intercept = 0.1, var_variables = 0.1, fixed_intercept = FALSE, fixed_variables = FALSE)
 
-dygraph(cbind(PIB = get_data(mod2_2019)[,1],
-              lm = test$model$lm$fitted.values,
-              piecelm = test$model$piece_lm$model$fitted.values,
-              tvlm = test$model$tvlm$fitted,
-              ssm = test2$fitted[,"smoothed"]))%>%
-  dyOptions(colors = c("black", "orange", "green", "red", "purple" ))
-
-dygraph(cbind(PIB = get_data(mod2_2019)[,1],
-              ssm = test2$fitted[,"smoothed"]))%>%
-  dyOptions(colors = c("black", "purple" ))
-
 test3 = ssm_lm_oos(mod2_2019,  var_intercept = 0.1, var_variables = 0.1, fixed_intercept = FALSE, fixed_variables = FALSE)
-
-dygraph(cbind(PIB = get_data(mod2_2019)[,1],
-              ssm = test3$prevision))%>%
-  dyOptions(colors = c("black", "purple" ))
 
 plot_all = dygraph(cbind(PIB = get_data(mod2_2019)[,1],
               lm = test$prevision$prev_lm$prevision,
@@ -51,7 +45,7 @@ saveRDS(plot_all, file = "graphs_atelier/plot_all.RDS")
 data_plot = data.frame(time(get_data(mod2_2019)),
                        get_data(mod2_2019)[,1],
                        mod2_2019$fitted.values,
-                       test$model$piece_lm$model$fitted.values,
+                       piecereg$model$fitted.values,
                        test$model$tvlm$fitted,
                        test2$fitted[, "smoothed"])
 colnames(data_plot) = c("Time", "PIB", "lm", "piecelm", "tvlm", "ssm")
@@ -76,43 +70,11 @@ plot_ssm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, ssm = data_plot
   dyOptions(colors = c("black", "orange", "purple"))
 saveRDS(plot_ssm, file = "graphs_atelier/plot_ssm.RDS")
 
-# plot_pib = ggplot(data_plot, aes(Time, PIB)) +
-#   geom_line() +
-#   theme_minimal()
-# ggsave("graphs_atelier/plot_pib.svg", plot = plot_pib, height = 20, width = 40, units = "cm")
-#
-# plot_lm = ggplot(data_plot, aes(Time, PIB)) +
-#   geom_line() +
-#   geom_line(aes(,lm), color = "orange") +
-#   theme_minimal()
-# ggsave("graphs_atelier/plot_lm.svg", plot = plot_lm, height = 20, width = 40, units = "cm")
-#
-# plot_piecelm = ggplot(data_plot, aes(Time, PIB)) +
-#   geom_line() +
-#   geom_line(aes(,lm), color = "orange") +
-#   geom_line(aes(,piecelm), color = "green") +
-#   theme_minimal()
-# ggsave("graphs_atelier/plot_piecelm.svg", plot = plot_piecelm, height = 20, width = 40, units = "cm")
-#
-# plot_tvlm = ggplot(data_plot, aes(Time, PIB)) +
-#   geom_line() +
-#   geom_line(aes(,lm), color = "orange") +
-#   geom_line(aes(,tvlm), color = "red") +
-#   theme_minimal()
-# ggsave("graphs_atelier/plot_tvlm.svg", plot = plot_tvlm, height = 20, width = 40, units = "cm")
-#
-# plot_ssm = ggplot(data_plot, aes(Time, PIB)) +
-#   geom_line() +
-#   geom_line(aes(,lm), color = "orange") +
-#   geom_line(aes(,ssm), color = "purple") +
-#   theme_minimal()
-# ggsave("graphs_atelier/plot_ssm.svg", plot = plot_ssm, height = 20, width = 40, units = "cm")
-
 
 data_plot2 = cbind(time(get_data(mod2_2019)),
                                  get_data(mod2_2019)[,1],
                                  test$prevision$prev_lm$prevision,
-                                 test$prevision$prev_piece_lm$prevision,
+                                 soos_piece$prevision,
                                  test$prevision$prev_tvlm$prevision,
                                  test3$prevision)
 colnames(data_plot2) = c("Time", "PIB", "lm", "piecelm", "tvlm", "ssm")
@@ -133,32 +95,7 @@ oos_ssm = dygraph(cbind(PIB = data_plot2[,"PIB"], lm = data_plot2[,"lm"], ssm = 
   dyOptions(colors = c("black", "orange", "purple"))
 saveRDS(oos_ssm, file = "graphs_atelier/oos_ssm.RDS")
 
-# oos_lm = ggplot(data_plot2, aes(Time, PIB)) +
-#   geom_line() +
-#   geom_line(aes(,lm), color = "orange") +
-#   theme_minimal()
-# ggsave("graphs_atelier/oos_lm.svg", plot = oos_lm, height = 20, width = 40, units = "cm")
-#
-# oos_piecelm = ggplot(data_plot2, aes(Time, PIB)) +
-#   geom_line() +
-#   geom_line(aes(,lm), color = "orange") +
-#   geom_line(aes(,piecelm), color = "green") +
-#   theme_minimal()
-# ggsave("graphs_atelier/oos_piecelm.svg", plot = oos_piecelm, height = 20, width = 40, units = "cm")
-#
-# oos_tvlm = ggplot(data_plot2, aes(Time, PIB)) +
-#   geom_line() +
-#   geom_line(aes(,lm), color = "orange") +
-#   geom_line(aes(,tvlm), color = "red") +
-#   theme_minimal()
-# ggsave("graphs_atelier/oos_tvlm.svg", plot = oos_tvlm, height = 20, width = 40, units = "cm")
-#
-# oos_ssm = ggplot(data_plot2, aes(Time, PIB)) +
-#   geom_line() +
-#   geom_line(aes(,lm), color = "orange") +
-#   geom_line(aes(,ssm), color = "purple") +
-#   theme_minimal()
-# ggsave("graphs_atelier/oos_ssm.svg", plot = oos_ssm, height = 20, width = 40, units = "cm")
+
 
 
 

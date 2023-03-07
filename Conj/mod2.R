@@ -44,7 +44,7 @@ mod3_cor <- dynlm::dynlm(pib3 ~ climat_fr_m3 + diff_climat_fr_m3,
                          data = data2)
 
 rmse_mod1 <- rmse_prev(mod1_cor, fixed_bw = TRUE)
-rmse_mod2 <- rmse_prev(mod2_cor)
+rmse_mod2 <- rmse_prev(mod2_cor, fixed_bw = TRUE)
 rmse_mod3 <- rmse_prev(mod3_cor, fixed_bw = TRUE)
 
 ssm_lm_best(mod1_cor)
