@@ -140,16 +140,16 @@ Limites de Bai Perron :
 On teste :
 
 $$
-PIB_t = (\beta_{0} + \beta_{1} climat\_fr_t + \beta_{2} \Delta climat\_fr_t) \mathbb 1_{t < t_1} +
+PIB_t = (\beta_{0} + \beta_{1} climat\_fr_t + \beta_{2} \Delta climat\_fr_t) \mathbb 1_{t \leq t_1} +
 \\
-(\beta_{0}' + \beta_{1}' climat\_fr_t + \beta_{2}' \Delta climat\_fr_t)\mathbb 1_{t\geq t_1} +
+(\beta_{0}' + \beta_{1}' climat\_fr_t + \beta_{2}' \Delta climat\_fr_t)\mathbb 1_{t > t_1} +
 \epsilon_t
 $$
 
 On ne peut pas tester :
 
 $$
-PIB_t = \beta_{0} + \beta_{1} climat\_fr_t + (\beta_{2} \mathbb 1_{t < t_1}+ \beta_{2}' \mathbb 1_{t\geq t_1})\Delta climat\_fr_t +
+PIB_t = \beta_{0} + \beta_{1} climat\_fr_t + (\beta_{2} \mathbb 1_{t \leq t_1}+ \beta_{2}' \mathbb 1_{t > t_1})\Delta climat\_fr_t +
 \epsilon_t
 $$
 
@@ -191,7 +191,7 @@ Modèles les plus simples :
 
 $$
 \exists t_1,\dots,t_{T-1}:\:
-\beta_t = \beta_1\mathbb 1_{t< t_1} + \beta_2 \mathbb 1_{t_1 \leq t< t_2} + \dots + \beta_T \mathbb 1_{t_{T-1} \leq t}
+\beta_t = \beta_1\mathbb 1_{t \leq t_1} + \beta_2 \mathbb 1_{t_1 < t \leq t_2} + \dots + \beta_T \mathbb 1_{t_{T-1} < t}
 $$
 
 . . .
@@ -206,7 +206,7 @@ Concentration plutôt sur `piece_reg` car donne une seule régression en sortie,
 
 Les estimations de coefficients restent les mêmes. Les seuls changements peuvent survenir sur la variance des sous-modèles qui peut différer de la variance du modèle d'ensemble. Et sur les estimations en temps réel.
 
-------------------------------------------------------------------------
+##
 
 Avantages :
 
@@ -222,13 +222,12 @@ Inconvénients :
 
 . . .
 
-Dans le cas de notre modèle exemple, Bai et Perron détecte une rupture en 2019. Le modèle suivant est alors estimé :
+Dans le cas de notre modèle exemple, Bai et Perron détecte deux ruptures en 2006 Q2 et 2011 Q2. Pur simplifier les exlications on ne retiendra que la deuxième. Le modèle suivant est alors estimé :
 
 $$
-PIB_t = \beta_{0,t}1_{t< 2019} + \beta_{0,t}1_{t \ge 2019} 
-+ \beta_{1,t}1_{t< 2019} climat\_fr_t + \beta_{1,t}1_{t \ge 2019} climat\_fr_t + 
+PIB_t = (\beta_{0,t}+ \beta_{1,t}climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t) \mathbb{1} _{t \leq 2011.25} +
 \\
-\beta_{2,t}1_{t < 2019} diff\_climat\_fr_t + \beta_{2,t}1_{t \ge 2019} diff\_climat\_fr_t + \epsilon_t 
+(\beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t) 1_{t > 2011.25} + \epsilon_t 
 $$
 
 ##
@@ -271,7 +270,7 @@ Remarque :
 
 -   Si $b=20$ le poids donné à toutes les données se rapproche de 1, estimation $\simeq$ à la régression linéaire
 
-------------------------------------------------------------------------
+##
 
 Inconvénient :
 
@@ -299,9 +298,15 @@ readRDS("graphs_atelier/plot_tvlm.RDS")
 readRDS("graphs_atelier/oos_tvlm.RDS")
 ```
 
+## 
+
 TODO ALAIN : Idée graphique : K_b en fonction de b -> validé
 
-TODO Claire : graph des coefs tvlm in sample
+##
+
+```{r}
+readRDS("graphs_atelier/plot_coef_tvlm.RDS")
+```
 
 
 ## Modèles espace-état
@@ -365,7 +370,15 @@ readRDS("graphs_atelier/oos_ssm.RDS")
 
 ## Résultats
 
-Quels modèles, quelle période, quelles conclusions ?
+Etude de 25 modèles de prévision de la production manufacturière (?) estimés entre 1990 Q1 et 2019 Q4. Ce que l'on peut retenir : 
 
-To do : graph prévision 2023Q1, modèle estimé jusqu'en 2022Q4
+- In sample : la plupart des modèles sont généralement meilleurs que le modèle linéaire 
+
+- Out of sample : les modèles espace_état sont meilleurs que le modèle linéaire en terme de RMSE pour la prévision hors échantillon. Pour ce qui est des autres modèles, plus variable d'un modèle à l'autre. Logique puisque l'objectif n'est pas de trouver un modèle magique. 
+
+##
+
+```{r}
+readRDS("graphs_atelier/plot_previsions.RDS")
+```
 
