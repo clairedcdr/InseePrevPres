@@ -10,8 +10,7 @@ pib = (pib / stats::lag(pib, -1)-1)*100
 data_pib <- ts.union(pib, soldes_trim, diff(soldes_trim, 1))
 colnames(data_pib) <- c("pib", sprintf("climat_fr_m%i", 1:3),
                         sprintf("diff_climat_fr_m%i", 1:3))
-data_pib_2019 <- window(data_pib, start = 1990, end = c(2019,4)
-)
+data_pib_2019 <- window(data_pib, start = 1990, end = c(2019,4))
 
 mod1_2019 <- dynlm::dynlm(pib ~ climat_fr_m1 + diff_climat_fr_m1, data = data_pib_2019)
 mod2_2019 <- dynlm::dynlm(pib ~ climat_fr_m2 + diff_climat_fr_m2, data = data_pib_2019)
@@ -141,5 +140,11 @@ plot_coef_tvlm = dygraph(coef_tvlm, main = "Coefficients régression locale") %>
   dyRangeSelector()
 saveRDS(plot_coef_tvlm, file = "graphs_atelier/plot_coef_tvlm.RDS")
 
-
+# plot_coef_ssm = dygraph(coef_ssm, main = "Coefficients modèle espace-état") %>%
+#   dyLegend(width = 110) %>%
+#   dySeries("(Intercept)", label = "cste") %>%
+#   dySeries("climat_fr_m2", label = "climat") %>%
+#   dySeries("diff_climat_fr_m2", label = "diff_climat") %>%
+#   dyRangeSelector()
+# saveRDS(plot_coef_ssm, file = "graphs_atelier/plot_coef_ssm.RDS")
 

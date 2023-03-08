@@ -8,12 +8,10 @@ model_invariant = models[names(models) %in% names(model_variant) == FALSE]
 get_formula_variants = lapply(model_variant, get_formula)
 fixed_coef_variants = lapply(model_variant, fixed_coefficients)
 
-test_model_variant = lapply(seq_along(model_variant), function(i) {
-  rmse_prev(formula = get_formula_variants[[i]],
-            data = data,
-            var_fixes = fixed_coef_variants[[i]],
-            date = 28)
+test_model_variant = lapply(model_variant, function(mod) {
+  rmse_prev(x = mod, var_fixes = fixed_coefficients(mod))
 })
+
 names(test_model_variant) = names(model_variant)
 test_model_invariant = lapply(model_invariant, rmse_prev, date = 28)
 
@@ -26,15 +24,13 @@ test = c(test_model_invariant[1:8],
          test_model_invariant[16:17],
          test_model_variant[8])
 
-test_variant_fixed = lapply(seq_along(model_variant), function(i) {
-  rmse_prev(formula = get_formula_variants[[i]],
-            data = data,
-            var_fixes = fixed_coef_variants[[i]],
-            date = 28,
+test_variant_fixed = lapply(model_variant, function(mod) {
+  rmse_prev(x = mod,
+            var_fixes = fixed_coefficients(mod),
             fixed_bw = TRUE)
 })
-names(test_variant_fixed) = names(model_variant)
-test_invariant_fixed = lapply(lapply(model_invariant, get_formula), rmse_prev, data = data, date = 28, fixed_bw = TRUE)
+
+test_invariant_fixed = lapply(model_invariant, rmse_prev, fixed_bw = TRUE)
 
 test_fixed = c(test_invariant_fixed[1:8],
                test_variant_fixed[1],

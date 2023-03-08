@@ -51,12 +51,9 @@ $$
 
 Ce qui donne les coefficients suivants : 
 
-::: {.center}
-
 ```{r}
 printCoefmat(readRDS("summary.RDS"), signif.legend = F)
 ```
-:::
 
 ## 
 
@@ -66,7 +63,7 @@ $$
 \sqrt{\frac{\sum_{t=1}^{T} (PIB_t - \widehat{PIB}_t)^2}{T}}
 $$
 
-On peut aussi s'appuyer sur le test de Diebold Mariano. Développer ? 
+On peut aussi s'appuyer sur le test de Diebold Mariano. De la même manière il compare les erreurs de prédiction de deux modèles et si leur différence est significative. 
 
 Grâce à ces méthodes on peut comparer les estimations dans l'échantillon, ou en temps réel. 
 
@@ -95,11 +92,19 @@ readRDS("graphs_atelier/oos_lm.RDS")
 
 ## 
 
-Notre idée de voir comment on pourrait 
+Notre idée était donc de voir comment on pourrait modéliser et estimer le modèle suivant: 
 
 $$
 PIB_t = \beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t + \epsilon_t
 $$
+
+Il s'agira donc de passer en revue les différents modèles que nous avons pu étudier 
+
+1. Les tests statitiques à notre disposition
+1. Les régressions par morceaux
+1. Les régressions locales
+1. Les modèles espace-état
+1. Quelques résultats 
 
 ## Tests statistiques
 
@@ -184,8 +189,6 @@ Limites de Hansen :
 Comme tout test, ils ont leurs limites, prendre les résultats avec précaution. Ex : même si le test de Hansen ne détecte pas d'instabilité, le test de Bai et Perron peu néanmoins détecter des ruptures.
 
 ## Régressions linéaires par morceaux
-
-TO DO :fixer breakdates piecereg
 
 Modèles les plus simples :
 
@@ -300,7 +303,7 @@ readRDS("graphs_atelier/oos_tvlm.RDS")
 
 ## 
 
-TODO ALAIN : Idée graphique : K_b en fonction de b -> validé
+![Noyau en fonction de b](graphs_atelier/test.gif){fig-align="center"}
 
 ##
 
@@ -370,11 +373,26 @@ readRDS("graphs_atelier/oos_ssm.RDS")
 
 ## Résultats
 
-Etude de 25 modèles de prévision de la production manufacturière (?) estimés entre 1990 Q1 et 2019 Q4. Ce que l'on peut retenir : 
+Etude de 25 modèles de prévision de la production manufacturière (?) estimés entre 1990 Q1 et 2019 Q4. On estime dans l'échantillon et en temps réel les différents modèles précédents et on compare les RMSE des modèles par rapport au modèle linéaire. Puis on fait des moyennes par secteur. On obtient les résultats suivants :  
+
+```{r}
+library(DT)
+stat_is <- readRDS("graphs_atelier/stats_is.RDS")
+stat_is <- round(stat_is, digits = 5)
+stat_is
+```
+
+```{r}
+stat_oos <- readRDS("graphs_atelier/stats_oos.RDS")
+stat_oos <- round(stat_oos, digits = 5)
+stat_oos
+```
+
+Ce que l'on peut retenir : 
 
 - In sample : la plupart des modèles sont généralement meilleurs que le modèle linéaire 
 
-- Out of sample : les modèles espace_état sont meilleurs que le modèle linéaire en terme de RMSE pour la prévision hors échantillon. Pour ce qui est des autres modèles, plus variable d'un modèle à l'autre. Logique puisque l'objectif n'est pas de trouver un modèle magique. 
+- Out of sample : les modèles espace_état sont meilleurs que le modèle linéaire en terme de RMSE pour la prévision hors échantillon. Pour ce qui est des autres modèles, plus variable d'un modèle à l'autre.
 
 ##
 

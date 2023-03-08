@@ -48,6 +48,6 @@ ssm_lm_all_oos = lapply(names(models),
 
 names(ssm_lm_all_oos) = names(models)
 rmse_ssm_oos = lapply(ssm_lm_all_oos, function(x){
-  rmse_res(x[[1]][, ncol(x[[1]])])
+  rmse_res(x$oos_noise)
 })
 
