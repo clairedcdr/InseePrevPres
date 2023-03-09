@@ -49,11 +49,14 @@ $$
 PIB_t = \beta_0 + \beta_1 climat\_fr_t + \beta_2 \Delta climat\_fr_t + \epsilon_t
 $$
 
-Ce qui donne les coefficients suivants : 
+. . . 
 
-```{r}
-printCoefmat(readRDS("summary.RDS"), signif.legend = F)
-```
+Ce qui nous donne l'estimation suivante : 
+
+$$
+PIB_t = -2,09 + 0,02 \times climat\_fr_t + 0,04 \times \Delta climat\_fr_t + \epsilon_t
+$$
+
 
 ## 
 
@@ -63,13 +66,19 @@ $$
 \sqrt{\frac{\sum_{t=1}^{T} (PIB_t - \widehat{PIB}_t)^2}{T}}
 $$
 
+. . . 
+
 On peut aussi s'appuyer sur le test de Diebold Mariano. De la même manière il compare les erreurs de prédiction de deux modèles et si leur différence est significative. 
+
+. . . 
 
 Grâce à ces méthodes on peut comparer les estimations dans l'échantillon, ou en temps réel. 
 
-- Dans l'échantillon : utilise toutes les données disponibles pour estimer les valeurs au sein de l'échantillon. Ce sont les fitted values qu'on obtient après une régression linéaire. 
+- Dans l'échantillon : utilise toutes les données disponibles pour estimer les valeurs au sein de l'échantillon. Ce sont les valeurs ajustées qu'on obtient après une régression linéaire. 
 
-- En temps réel : S'appuie sur les prévisions hors échantillon, qui utilise un sous-ensemble de données pour prévoir des valeurs en dehors de cet échantillon. Pour des estimations en temps réel on estime le modèle sur sur un sous ensemble de données, on prévoit une estimation en dehors du modèle, puis on recommence en ajoutant une nouvelle donnée. On obtient une simulation de prévisions. 
+. . . 
+
+- En temps réel : S'appuie sur les prévisions hors échantillon qui prévoient des valeurs en dehors d'un échantillon de données. Pour des estimations en temps réel on estime le modèle sur sur un sous ensemble de données, on prévoit une estimation en dehors du modèle, puis on recommence en ajoutant une nouvelle donnée.
 
 ## 
 
@@ -186,7 +195,7 @@ Limites de Hansen :
 
 - Interprétation constante
 
-Comme tout test, ils ont leurs limites, prendre les résultats avec précaution. Ex : même si le test de Hansen ne détecte pas d'instabilité, le test de Bai et Perron peu néanmoins détecter des ruptures.
+Comme tout test, ils ont leurs limites, prendre les résultats avec précaution. Ex : même si le test de Hansen ne détecte pas d'instabilité, le test de Bai et Perron peut néanmoins détecter des ruptures.
 
 ## Régressions linéaires par morceaux
 
@@ -225,7 +234,7 @@ Inconvénients :
 
 . . .
 
-Dans le cas de notre modèle exemple, Bai et Perron détecte deux ruptures en 2006 Q2 et 2011 Q2. Pur simplifier les exlications on ne retiendra que la deuxième. Le modèle suivant est alors estimé :
+Dans le cas de notre modèle exemple, Bai et Perron détecte deux ruptures en 2006 Q2 et 2011 Q2. Pour simplifier les explications on ne retiendra que la deuxième. Le modèle suivant est alors estimé :
 
 $$
 PIB_t = (\beta_{0,t}+ \beta_{1,t}climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t) \mathbb{1} _{t \leq 2011.25} +
@@ -339,7 +348,7 @@ avec $y_t$ de dimension $p\times 1$ vecteur des observations, et $\alpha_t$ de d
 
 La première équation est l'équation d'observation (*observation equation*) et la seconde l'équation d'état (*state equation*).
 
-------------------------------------------------------------------------
+## 
 
 Pour simplifier les calculs et les rendre plus rapide (sutout en présence de beaucoup de données), cette méthode utilise certaines techniques permettant d'estimer tous les paramètres de manière dynamique, comme le filtre de Kalman.
 
@@ -352,6 +361,8 @@ Deux opérations classiques : *filtering* et *smoothing*
 $$
 \hat\alpha_t = E[\alpha_t|y_0, \dots, y_n]
 $$
+
+. . . 
 
 -   Filtering : estime le coefficient suivant (en $t+1$) avec les informations connues en t. Ce qui est proche des estimations en temps-réel.
 
@@ -373,7 +384,11 @@ readRDS("graphs_atelier/oos_ssm.RDS")
 
 ## Résultats
 
-Etude de 25 modèles de prévision de la production manufacturière (?) estimés entre 1990 Q1 et 2019 Q4. On estime dans l'échantillon et en temps réel les différents modèles précédents et on compare les RMSE des modèles par rapport au modèle linéaire. Puis on fait des moyennes par secteur. On obtient les résultats suivants :  
+Etude de 25 modèles de prévision de la production manufacturière estimés entre 1990 Q1 et 2019 Q4. On estime les différents modèles présentés dans l'échantillon et en temps réel, puis on compare les RMSE des modèles par rapport au modèle linéaire. Enfin on fait des moyennes par secteur.
+
+. . . 
+
+On obtient les résultats suivants :  
 
 ```{r}
 library(DT)
@@ -382,11 +397,15 @@ stat_is <- round(stat_is, digits = 5)
 stat_is
 ```
 
+. . . 
+
 ```{r}
 stat_oos <- readRDS("graphs_atelier/stats_oos.RDS")
 stat_oos <- round(stat_oos, digits = 5)
 stat_oos
 ```
+
+##
 
 Ce que l'on peut retenir : 
 
@@ -399,4 +418,24 @@ Ce que l'on peut retenir :
 ```{r}
 readRDS("graphs_atelier/plot_previsions.RDS")
 ```
+
+
+##
+
+TODO:
+
+- TODO Alain
+
+- Conclusion + parler du package
+
+- Tableaux
+
+- Développer plus sur les résultats ?
+
+- Relire TP / Slides
+
+- Revoir plan ?
+
+- renommer soos_prev et var_fixes, rmse_res (y.c. TP)
+
 
