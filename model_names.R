@@ -5,17 +5,14 @@ tvlm = mget(ls(pattern = "^tvlm_(c|m)\\w*(_\\d*)+$"))
 model_variant = mget(c("model_c3_2", "model_c3_4", "model_c5_1", "model_c5_2", "model_c5_3", "model_c5_4", "model_c5_5", "model_manuf_3"))
 model_invariant = models[names(models) %in% names(model_variant) == FALSE]
 
-get_formula_variants = lapply(model_variant, get_formula)
-fixed_coef_variants = lapply(model_variant, fixed_coefficients)
-
 test_model_variant = lapply(model_variant, function(mod) {
   rmse_prev(x = mod, var_fixes = fixed_coefficients(mod))
 })
 
 names(test_model_variant) = names(model_variant)
-test_model_invariant = lapply(model_invariant, rmse_prev, date = 28)
+test_model_invariant = lapply(model_invariant, rmse_prev)
 
-test = c(test_model_invariant[1:8],
+test_model = c(test_model_invariant[1:8],
          test_model_variant[1],
          test_model_invariant[9],
          test_model_variant[2],

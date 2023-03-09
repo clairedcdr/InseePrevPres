@@ -13,7 +13,7 @@ colnames(data_pib) <- c("pib", sprintf("climat_fr_m%i", 1:3),
 data_pib_2019 <- window(data_pib, start = 1990, end = c(2019,4))
 
 mod1_2019 <- dynlm::dynlm(pib ~ climat_fr_m1 + diff_climat_fr_m1, data = data_pib_2019)
-mod2_2019 <- dynlm::dynlm(pib ~ climat_fr_m2 + diff_climat_fr_m2, data = data_pib_2019)
+mod2_2019 <- dynlm::dynlm(pib ~ climat_fr_m2 + diff_climat_fr_m2, data = window(data_pib_2019, start = 2000))
 mod3_2019 <- dynlm::dynlm(pib ~ climat_fr_m3 + diff_climat_fr_m3, data = data_pib_2019)
 
 sum = summary(mod2_2019)$coefficients
@@ -22,11 +22,11 @@ saveRDS(sum, file = "summary.RDS")
 
 hansen.test(mod2_2019)
 
-test = rmse_prev(mod2_2019, fixed_bw = TRUE, break_dates = 2011.25)
+test = rmse_prev(mod2_2019, fixed_bw = TRUE)
 
-test2 = ssm_lm(mod2_2019, var_intercept = 0.1, var_variables = 0.1, fixed_intercept = FALSE, fixed_variables = FALSE)
+test2 = ssm_lm(mod2_2019, var_intercept = 0.1, var_variables = 0.1, fixed_var_intercept = FALSE, fixed_var_variables = FALSE)
 
-test3 = ssm_lm_oos(mod2_2019,  var_intercept = 0.1, var_variables = 0.1, fixed_intercept = FALSE, fixed_variables = FALSE)
+test3 = ssm_lm_oos(mod2_2019,  var_intercept = 0.1, var_variables = 0.1, fixed_var_intercept = FALSE, fixed_var_variables = FALSE)
 
 plot_all = dygraph(cbind(PIB = get_data(mod2_2019)[,1],
                          lm = test$prevision$prev_lm$prevision,
@@ -52,22 +52,22 @@ plot_pib = dygraph(data_plot$PIB, main = "PIB entre 1990 et 2019") %>%
   dySeries("V1", label = "PIB") %>%
   dyLegend(show = "always", width = 130)
 
-plot_lm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm), main = "Fitted values modèle linéaire") %>%
+plot_lm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm), main = "Valeurs ajustées modèle linéaire") %>%
   dyOptions(colors = c("black", "orange"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
 
-plot_piecelm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, piecelm = data_plot$piecelm), main = "Fitted values régression par morceaux") %>%
+plot_piecelm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, piecelm = data_plot$piecelm), main = "Valeurs ajustées régression par morceaux") %>%
   dyOptions(colors = c("black", "orange", "green"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
 
-plot_tvlm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, tvlm = data_plot$tvlm), main = "Fitted values régression locale") %>%
+plot_tvlm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, tvlm = data_plot$tvlm), main = "Valeurs ajustées régression locale") %>%
   dyOptions(colors = c("black", "orange", "blue"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
 
-plot_ssm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, ssm = data_plot$ssm), main = "Fitted values modèle espace-état") %>%
+plot_ssm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, ssm = data_plot$ssm), main = "Valeurs ajustées modèle espace-état") %>%
   dyOptions(colors = c("black", "orange", "purple"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
@@ -119,18 +119,29 @@ nrow(data_pib_2019)
 
 coef_tvlm = ts(test$model$tvlm$coefficients, end = 2019.75, frequency = 4)
 coef_ssm = test2$smoothed_states[, c(1:3)]
-coef_lm = ts(cbind(rep(test$model$lm$coefficients[1], 120), test$model$lm$coefficients[2], test$model$lm$coefficients[3]), end = 2019.75, frequency = 4)
+coef_lm = ts(cbind(rep(test$model$lm$coefficients[1], 80), test$model$lm$coefficients[2], test$model$lm$coefficients[3]), end = 2019.75, frequency = 4)
 colnames(coef_lm) = colnames(coef_tvlm)
+time(window(data_pib_2019, start = 2000)) %>% length
 
-coef_intercept = cbind(lm = coef_lm[,1], int_tvlm = coef_tvlm[,1], int_ssm = coef_ssm[,1])
-coef_climat = cbind(cli_lm = coef_lm[,2], cli_tvlm = coef_tvlm[,2], cli_ssm = coef_ssm[,2])
-coef_diff = cbind(diff_lm = coef_lm[,3], diff_tvlm = coef_tvlm[,3], diff_ssm = coef_ssm[,3])
+coef_intercept = cbind(lm = coef_lm[,1], tvlm = coef_tvlm[,1], ssm = coef_ssm[,1])
+coef_climat = cbind(lm = coef_lm[,2], tvlm = coef_tvlm[,2], ssm = coef_ssm[,2])
+coef_diff = cbind(lm = coef_lm[,3], tvlm = coef_tvlm[,3], ssm = coef_ssm[,3])
 
-dygraph(cbind(coef_intercept, coef_climat, coef_diff))
+plot_intercept = dygraph(coef_intercept, main = "Coefficients intercept") %>%
+  dyLegend(width = 110) %>%
+  dyRangeSelector()
+saveRDS(plot_intercept, file = "graphs_atelier/plot_intercept.RDS")
 
-dygraph(coef_intercept)
-dygraph(coef_climat)
-dygraph(coef_diff)
+plot_climat = dygraph(coef_climat, main = "Coefficients climat") %>%
+  dyLegend(width = 110) %>%
+  dyRangeSelector()
+saveRDS(plot_climat, file = "graphs_atelier/plot_climat.RDS")
+
+plot_diff = dygraph(coef_diff, main = "Coefficients diff_climat") %>%
+  dyLegend(width = 110) %>%
+  dyRangeSelector()
+saveRDS(plot_diff, file = "graphs_atelier/plot_diff.RDS")
+
 
 plot_coef_tvlm = dygraph(coef_tvlm, main = "Coefficients régression locale") %>%
   dyLegend(width = 110) %>%
@@ -140,11 +151,23 @@ plot_coef_tvlm = dygraph(coef_tvlm, main = "Coefficients régression locale") %>
   dyRangeSelector()
 saveRDS(plot_coef_tvlm, file = "graphs_atelier/plot_coef_tvlm.RDS")
 
-# plot_coef_ssm = dygraph(coef_ssm, main = "Coefficients modèle espace-état") %>%
-#   dyLegend(width = 110) %>%
-#   dySeries("(Intercept)", label = "cste") %>%
-#   dySeries("climat_fr_m2", label = "climat") %>%
-#   dySeries("diff_climat_fr_m2", label = "diff_climat") %>%
-#   dyRangeSelector()
-# saveRDS(plot_coef_ssm, file = "graphs_atelier/plot_coef_ssm.RDS")
+plot_coef_ssm = dygraph(coef_ssm, main = "Coefficients modèle espace-état") %>%
+  dyLegend(width = 110) %>%
+  dySeries("(Intercept)", label = "cste") %>%
+  dySeries("climat_fr_m2", label = "climat") %>%
+  dySeries("diff_climat_fr_m2", label = "diff_climat") %>%
+  dyRangeSelector()
+saveRDS(plot_coef_ssm, file = "graphs_atelier/plot_coef_ssm.RDS")
 
+dygraph(coef_tvlm[,-1], main = "Coefficients régression locale") %>%
+  dyLegend(width = 110) %>%
+  dySeries("climat_fr_m2", label = "climat") %>%
+  dySeries("diff_climat_fr_m2", label = "diff_climat") %>%
+  dyRangeSelector()
+
+
+dygraph(coef_ssm[,-1], main = "Coefficients régression locale") %>%
+  dyLegend(width = 110) %>%
+  dySeries("climat_fr_m2", label = "climat") %>%
+  dySeries("diff_climat_fr_m2", label = "diff_climat") %>%
+  dyRangeSelector()

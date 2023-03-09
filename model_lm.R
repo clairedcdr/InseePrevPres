@@ -1,4 +1,6 @@
 
+
+
 model_manuf_1 = dynlm( prod_manuf ~ ind2008Q4 + ind2009Q1  + acquis_ipi0 + diff(ins_tppa_m2,1) ,
                        data = data
 )

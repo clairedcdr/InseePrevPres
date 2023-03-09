@@ -367,7 +367,7 @@ $$
 -   Filtering : estime le coefficient suivant (en $t+1$) avec les informations connues en t. Ce qui est proche des estimations en temps-réel.
 
 $$
-a_{t+1} = E[\alpha_t|y_0, \dots, y_t]
+a_{t+1} = E[\alpha_{t+1}|y_0, \dots, y_t]
 $$
 
 ##
@@ -422,9 +422,19 @@ readRDS("graphs_atelier/plot_previsions.RDS")
 
 ##
 
+```{r}
+#| layout: [[50, 50], [100]]
+#| fig-height: 3.5
+readRDS("graphs_atelier/plot_previsions.RDS")
+readRDS("graphs_atelier/plot_previsions.RDS")
+readRDS("graphs_atelier/plot_previsions.RDS")
+```
+
+##
+
 TODO:
 
-- TODO Alain
+- TODO Alain + SSM
 
 - Conclusion + parler du package
 
@@ -437,5 +447,7 @@ TODO:
 - Revoir plan ?
 
 - renommer soos_prev et var_fixes, rmse_res (y.c. TP)
+
+
 
 
