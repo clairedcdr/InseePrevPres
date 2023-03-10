@@ -53,7 +53,7 @@ ssm_lm_best(mod3_cor)
 hansen.test(mod3_cor)
 hansen.test(mod2_cor)
 
-rmse_var_mod2 <- rmse_prev(mod2_cor, fixed_bw = TRUE, var_fixes = fixed_coefficients(mod2_cor))
+rmse_var_mod2 <- rmse_prev(mod2_cor, fixed_bw = TRUE, fixed_var = fixed_coefficients(mod2_cor))
 sort(rmse_var_mod2$rmse[[1]])
 sort(rmse_var_mod2$rmse[[2]])
 

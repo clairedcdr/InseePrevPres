@@ -191,8 +191,8 @@ prepare_plot <- function(data_p, y, trunc = TRUE) {
                       alternative  = "greater")$p.value
   }
 
-  rmse <- data.frame(all = apply(data_p[["noise"]], 2, tvCoef::rmse_res),
-                     pre2020 = apply(window(data_p[["noise"]], end = c(2019, 4)), 2, tvCoef::rmse_res)
+  rmse <- data.frame(all = apply(data_p[["noise"]], 2, tvCoef::rmse),
+                     pre2020 = apply(window(data_p[["noise"]], end = c(2019, 4)), 2, tvCoef::rmse)
   )
   pval = c(pval_dm(data_p[["noise"]]),
            pval_dm(window(data_p[["noise"]], end = c(2019, 4))))
@@ -269,15 +269,15 @@ coef(mod1_trunc)
 # x= rmse_prev(mod1_ind, fixed_bw = TRUE, bw = 20)
 # x$model$tvlm
 # x$model$piece_tvlm
-# window(x$prevision$prev_piece_tvlm$residuals, end = 2020) %>% rmse_res
-# window(x$prevision$prev_piece_lm$residuals, end = 2020) %>% rmse_res
-# window(x$prevision$prev_lm$residuals, end = 2020) %>% rmse_res
-# window(x$prevision$prev_tvlm$residuals, end = 2020) %>% rmse_res
+# window(x$prevision$prev_piece_tvlm$residuals, end = 2020) %>% rmse
+# window(x$prevision$prev_piece_lm$residuals, end = 2020) %>% rmse
+# window(x$prevision$prev_lm$residuals, end = 2020) %>% rmse
+# window(x$prevision$prev_tvlm$residuals, end = 2020) %>% rmse
 # x$prevision$prev_tvlm$model
 #
 # mod1_ind$coefficients
 # mod1_ind$model
-# soos_prev(mod1_ind)$residuals %>% rmse_res
+# oos_prev(mod1_ind)$residuals %>% rmse
 # test_lm = piece_reg(mod1_ind)
 # tail(test_lm$model$model, 20)
 # test = piece_reg(mod1_ind, tvlm = TRUE)

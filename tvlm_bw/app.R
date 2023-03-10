@@ -81,7 +81,7 @@ server <- function(input, output) {
 
   output$oosPlot <- renderDygraph({
     data_shiny <- x[[input$models]]
-    prevision <- soos_prev(tvlm(), end = c(2019,4), frequency = 4, date = 28, fixed_bw = TRUE, bw = input$bw)
+    prevision <- oos_prev(tvlm(), end = c(2019,4), frequency = 4, date = 28, fixed_bw = TRUE, bw = input$bw)
     data_plot <- do.call(cbind, list(get_data(data_shiny)[,1], prevision$prevision))
     colnames(data_plot) = c("Data", "Oos tvlm")
     dygraph(data_plot, main = "Out of sample previsions against data") %>%

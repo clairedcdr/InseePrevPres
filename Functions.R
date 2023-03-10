@@ -72,6 +72,6 @@ rmse_false_oos_tvlm = function(tvlm) {
   predict <- sapply(2:nrow(datatest), function(i) {
     datatest[i, ] %*% coef[i-1, ]
   })
-  rmse_res(tvlm$y[-1] - predict)
+  rmse(tvlm$y[-1] - predict)
 }
 

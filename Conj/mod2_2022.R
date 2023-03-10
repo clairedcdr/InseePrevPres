@@ -63,7 +63,7 @@ plot_cor_previsions = dygraph(cbind(PIB = get_data(model_cor)[,1],
   dyLegend(width = 130)
 saveRDS(plot_cor_previsions, file = "graphs_atelier/plot_cor_previsions.RDS")
 
-rmse_ssm_cor = c(rmse_res(ssm_cor$smoothed_states[,"noise"]), rmse_res(ssm_oos_cor$oos_noise))
+rmse_ssm_cor = c(rmse(ssm_cor$smoothed_states[,"noise"]), rmse(ssm_oos_cor$oos_noise))
 t(cbind(do.call(rbind, rmse_cor$rmse), rmse_ssm_cor))
 
 
@@ -104,13 +104,13 @@ saveRDS(plot_ind_previsions, file = "graphs_atelier/plot_ind_previsions.RDS")
 
 dygraph(cbind(get_data(model_ind)[,1], ssm_oos_ind$prevision))
 
-rmse_ssm_ind = c(rmse_res(ssm_ind$smoothed_states[,"noise"]), rmse_res(ssm_oos_ind$oos_noise))
+rmse_ssm_ind = c(rmse(ssm_ind$smoothed_states[,"noise"]), rmse(ssm_oos_ind$oos_noise))
 c(rmse_ind$rmse, rmse_ssm_ind)
 
 resid_ind <- cbind(do.call(cbind,lapply(rmse_ind$prevision,`[[`, "residuals")),
                    ssm_oos_ind$oos_noise)
 resid_ind[time(resid_ind) %in% seq(2020, by = 0.25, length.out = 4),] <- NA
-apply(window(resid_ind, start = 2010, end = 2019.75), 2, rmse_res)
+apply(window(resid_ind, start = 2010, end = 2019.75), 2, rmse)
 
 ## Modèle complet
 
@@ -141,7 +141,7 @@ plot_previsions = dygraph(cbind(PIB = get_data(model)[,1],
   dyLegend(width = 300)
 saveRDS(plot_previsions, file = "graphs_atelier/plot_previsions.RDS")
 
-rmse_ssm = c(rmse_res(ssm$smoothed_states[,"noise"]), rmse_res(ssm_oos$oos_noise))
+rmse_ssm = c(rmse(ssm$smoothed_states[,"noise"]), rmse(ssm_oos$oos_noise))
 c(rmse$rmse, rmse_ssm)
 
 

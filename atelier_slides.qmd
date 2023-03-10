@@ -464,7 +464,7 @@ TODO:
 
 - Revoir plan ?
 
-- renommer soos_prev et var_fixes, rmse_res (y.c. TP)
+- renommer oos_prev et fixed_var, rmse (y.c. TP)
 
 
 

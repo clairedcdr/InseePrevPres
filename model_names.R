@@ -6,7 +6,7 @@ model_variant = mget(c("model_c3_2", "model_c3_4", "model_c5_1", "model_c5_2", "
 model_invariant = models[names(models) %in% names(model_variant) == FALSE]
 
 test_model_variant = lapply(model_variant, function(mod) {
-  rmse_prev(x = mod, var_fixes = fixed_coefficients(mod))
+  rmse_prev(x = mod, fixed_var = fixed_coefficients(mod))
 })
 
 names(test_model_variant) = names(model_variant)
@@ -23,7 +23,7 @@ test_model = c(test_model_invariant[1:8],
 
 test_variant_fixed = lapply(model_variant, function(mod) {
   rmse_prev(x = mod,
-            var_fixes = fixed_coefficients(mod),
+            fixed_var = fixed_coefficients(mod),
             fixed_bw = TRUE)
 })
 
