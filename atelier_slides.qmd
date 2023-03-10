@@ -447,6 +447,8 @@ Les modèles espace-état sont meilleurs que le modèle linéaire en terme de RM
 readRDS("graphs_atelier/plot_previsions.RDS")
 ```
 
+## Conclusion
+
 
 
 
@@ -464,7 +466,16 @@ TODO:
 
 - Revoir plan ?
 
-- renommer oos_prev et fixed_var, rmse (y.c. TP)
+- dire que par défaut noyau triweight
+$$
+\kappa(x)=\frac{35}{32}\left(
+  1-
+  \left\lvert
+  x
+  \right\lvert^2
+\right)^3 \mathbb 1_{|x| \leq 1}
+$$
+
 
 
 
