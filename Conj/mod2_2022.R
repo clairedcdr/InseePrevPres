@@ -13,7 +13,7 @@ colnames(data_pib_22) <- c("pib", sprintf("climat_fr_m%i", 1:3),
 
 data_pib_23 <- window(data_pib_22, start = 2023, end = 2023)
 data_pib_23 <- c("(Intercept)" = 1, data_pib_23[, c("climat_fr_m2", "diff_climat_fr_m2")])
-data_pib_22 <- window(data_pib_22, start = 1990, end = c(2022,4))
+data_pib_22 <- window(data_pib_22, start = 2000, end = c(2022,4))
 
 model <- dynlm::dynlm(pib ~ climat_fr_m2 + diff_climat_fr_m2, data = data_pib_22)
 
@@ -114,8 +114,6 @@ apply(window(resid_ind, start = 2010, end = 2019.75), 2, rmse_res)
 
 ## Modèle complet
 
-model <- dynlm::dynlm(pib ~ climat_fr_m2 + diff_climat_fr_m2, data = window(data_pib_22, start = 2000))
-
 rmse = rmse_prev(model, fixed_bw = TRUE, break_dates = 2011)
 
 ssm = ssm_lm(model, var_intercept = 0.1, var_variables = 0.1, fixed_var_intercept = FALSE, fixed_var_variables = FALSE)
@@ -137,10 +135,10 @@ plot_previsions = dygraph(cbind(PIB = get_data(model)[,1],
                                 piece_lm = ts(c(rmse$prevision$prev_piece_lm$prevision, prev_23_piece), end = 2023, frequency = 4),
                                 tvlm = ts(c(rmse$prevision$prev_tvlm$prevision, prev_23_tvlm), end = 2023, frequency = 4),
                                 ssm = ts(c(ssm_oos$prevision, prev_23_ssm), end = 2023, frequency = 4)),
-                          main = "Previsions m2 2023 Q1") %>%
-  dyOptions(colors = c("black", "orange", "green", "blue", "purple")) %>%
+                          main = "Previsions 2023 Q1") %>%
+  dyOptions(colors = c("black", "red", "green", "blue", "purple")) %>%
   dyRangeSelector(dateWindow = c("2018-01-01", "2023-01-01")) %>%
-  dyLegend(width = 130)
+  dyLegend(width = 300)
 saveRDS(plot_previsions, file = "graphs_atelier/plot_previsions.RDS")
 
 rmse_ssm = c(rmse_res(ssm$smoothed_states[,"noise"]), rmse_res(ssm_oos$oos_noise))

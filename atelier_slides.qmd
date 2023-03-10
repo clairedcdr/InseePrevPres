@@ -282,6 +282,10 @@ Remarque :
 
 -   Si $b=20$ le poids donné à toutes les données se rapproche de 1, estimation $\simeq$ à la régression linéaire
 
+## 
+
+![Noyau en fonction de b](graphs_atelier/test.gif){fig-align="center"}
+
 ##
 
 Inconvénient :
@@ -309,10 +313,6 @@ readRDS("graphs_atelier/plot_tvlm.RDS")
 ```{r}
 readRDS("graphs_atelier/oos_tvlm.RDS")
 ```
-
-## 
-
-![Noyau en fonction de b](graphs_atelier/test.gif){fig-align="center"}
 
 ##
 
@@ -382,53 +382,73 @@ readRDS("graphs_atelier/plot_ssm.RDS")
 readRDS("graphs_atelier/oos_ssm.RDS")
 ```
 
+##
+
+```{r}
+#| layout: [[50, 50], [50, 50]]
+#| fig-height: 3.5
+readRDS("graphs_atelier/plot_intercept.RDS")
+readRDS("graphs_atelier/plot_climat.RDS")
+readRDS("graphs_atelier/plot_diff.RDS")
+```
+
+
+
 ## Résultats
 
 Etude de 25 modèles de prévision de la production manufacturière estimés entre 1990 Q1 et 2019 Q4. On estime les différents modèles présentés dans l'échantillon et en temps réel, puis on compare les RMSE des modèles par rapport au modèle linéaire. Enfin on fait des moyennes par secteur.
 
 . . . 
 
-On obtient les résultats suivants :  
+On obtient les résultats suivants pour les estimations dans l'échantillon :  
 
 ```{r}
 library(DT)
+library(knitr)
+library(kableExtra)
 stat_is <- readRDS("graphs_atelier/stats_is.RDS")
-stat_is <- round(stat_is, digits = 5)
-stat_is
+stat_is <- round(stat_is, digits = 2)
+rownames(stat_is) <- paste(rownames(stat_is), c("(7)","(5)","(5)","(5)","(3)"))
+stat_is <- stat_is[,c(2:6)]
+kableExtra::kable(stat_is) %>% 
+  kable_styling(bootstrap_options = c("condensed", "hover"), 
+                position = "center",
+                full_width = F) %>% 
+  kable_classic()
 ```
 
 . . . 
 
+La plupart des modèles sont généralement meilleurs que le modèle linéaire.  
+
+##
+
+Et en temps réel : 
+
 ```{r}
 stat_oos <- readRDS("graphs_atelier/stats_oos.RDS")
-stat_oos <- round(stat_oos, digits = 5)
-stat_oos
+stat_oos <- round(stat_oos, digits = 2)
+rownames(stat_oos) <- paste(rownames(stat_oos), c("(7)","(5)","(5)","(5)","(3)"))
+stat_oos <- stat_oos[,c(2:6)]
+kableExtra::kable(stat_oos) %>% 
+  kable_styling(bootstrap_options = c("condensed", "hover"), 
+                position = "center",
+                full_width = F) %>% 
+  kable_classic()
 ```
 
-##
+. . . 
 
-Ce que l'on peut retenir : 
-
-- In sample : la plupart des modèles sont généralement meilleurs que le modèle linéaire 
-
-- Out of sample : les modèles espace_état sont meilleurs que le modèle linéaire en terme de RMSE pour la prévision hors échantillon. Pour ce qui est des autres modèles, plus variable d'un modèle à l'autre.
-
-##
-
-```{r}
-readRDS("graphs_atelier/plot_previsions.RDS")
-```
-
+Les modèles espace-état sont meilleurs que le modèle linéaire en terme de RMSE pour la prévision en temps réel. Pour ce qui est des autres modèles, plus variable d'un modèle à l'autre.
 
 ##
 
 ```{r}
-#| layout: [[50, 50], [100]]
-#| fig-height: 3.5
-readRDS("graphs_atelier/plot_previsions.RDS")
-readRDS("graphs_atelier/plot_previsions.RDS")
 readRDS("graphs_atelier/plot_previsions.RDS")
 ```
+
+
+
 
 ##
 
@@ -437,8 +457,6 @@ TODO:
 - TODO Alain + SSM
 
 - Conclusion + parler du package
-
-- Tableaux
 
 - Développer plus sur les résultats ?
 
