@@ -109,6 +109,8 @@ $$
 
 Tout en restant sur des modèles proches de la régression linéaire pour que les résultats restent facilement interprétables. 
 
+. . . 
+
 Il s'agira donc de passer en revue les différents modèles que nous avons pu étudier 
 
 1. Les tests statitiques à notre disposition
