@@ -121,6 +121,8 @@ $$
 PIB_t = \beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t + \epsilon_t
 $$
 
+Idée : rester proche du cas de la régression linéaire pour que les résultats restent facilement interprétables. 
+
 Plan :
 
 1. Les tests statistiques étudiés
@@ -249,6 +251,8 @@ Différences : sur les variances et sur les estimations en temps réel.
 -   Facilement combinable avec d'autres types de modèles (régressions locales)
 
 {{< fa face-frown >}} Inconvénients :
+
+. . . 
 
 -   Suppose l'existence une rupture brutale
 
@@ -467,7 +471,9 @@ readRDS("graphs_atelier/plot_previsions.RDS")
 
 ## Conclusion
 
+- Plusieurs types de modèles, avec plusieurs options, se basant sur la régression linéaire
 
+- Tout ce qui a été présenté peut être reproduit grâce au package `tvCoef` qui sera plus développé lors de la partie pratique. 
 
 
 ##
