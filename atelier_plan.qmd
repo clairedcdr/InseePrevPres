@@ -10,62 +10,61 @@ editor: visual
 
 # Introduction
 
-- contexte pourquoi on fait ça, des exemples d'applications (où ça peut être utile)
+-   contexte pourquoi on fait ça, des exemples d'applications (où ça peut être utile)
 
-- expliquer le plan à travers un exemple
+-   expliquer le plan à travers un exemple
 
 ## Le modèle LM
 
-- Exemple : modèle PIB
+-   Exemple : modèle PIB
 
-- A quoi ça ressemble un modèle LM
+-   A quoi ça ressemble un modèle LM
 
-- hypothèses derrière l'estimation
+-   hypothèses derrière l'estimation
 
-- Montrer les résultats + graphiques sur les coefficients (estimation en temps-réel) ? Permet d'introduire les révisions et l'estimation en temps-réel ?
-
+-   Montrer les résultats + graphiques sur les coefficients (estimation en temps-réel) ? Permet d'introduire les révisions et l'estimation en temps-réel ?
 
 ## Coefficients qui varient ???
 
 Deux cas :
 
-- hansen : décrire plus, ne pas forcément détailler toute la stat de test
-  * Attention sur l'interprétation des résultats : si bouge pas d'après test peut quand même bouger.
+-   hansen : décrire plus, ne pas forcément détailler toute la stat de test
 
-- Décrire un peu plus Bai et Perron -> TODO ALAIN
+    -   Attention sur l'interprétation des résultats : si bouge pas d'après test peut quand même bouger.
 
-  * Modèle
-  * Comment sont déterminés les périodes ?
-  * Implémentation en R
-  * limites de Bai et perron (notamment dans l'implémentation : ensemble des variables) et attention sur l'interprétation des résultats.
-  
-- Si hansen bouge pas, bai et perron peut donner une date de rupture
+-   Décrire un peu plus Bai et Perron -\> TODO ALAIN
+
+    -   Modèle
+    -   Comment sont déterminés les périodes ?
+    -   Implémentation en R
+    -   limites de Bai et perron (notamment dans l'implémentation : ensemble des variables) et attention sur l'interprétation des résultats.
+
+-   Si hansen bouge pas, bai et perron peut donner une date de rupture
 
 ## bplm et piecereg
 
-- Parler de la différence entre bplm et piecereg et dire que nous on a retenu piecereg (on gagne des points et en pratique dire que c'est pareil car souvent dans les cas pratiques étudiés variance constante) en plus piecereg bien plus simples
+-   Parler de la différence entre bplm et piecereg et dire que nous on a retenu piecereg (on gagne des points et en pratique dire que c'est pareil car souvent dans les cas pratiques étudiés variance constante) en plus piecereg bien plus simples
 
-- Exemple de code et résultat sur modèle PIB
+-   Exemple de code et résultat sur modèle PIB
 
-## régressions locales : tvlm 
+## régressions locales : tvlm
 
-- détailler la théorie
-- expliquer bw : estimation, bornes (20 = lm)
+-   détailler la théorie
 
-- détailler les sources des révisions : ajout d'un point, recalcul de bw (et donc nouvelle répartition des poids sur le passé)
-- exemple modèle PIB, gif des coefs en focntion de bw
+-   expliquer bw : estimation, bornes (20 = lm)
+
+-   détailler les sources des révisions : ajout d'un point, recalcul de bw (et donc nouvelle répartition des poids sur le passé)
+
+-   exemple modèle PIB, gif des coefs en focntion de bw
 
 ## espace état
 
-- détailler la théorie : smoothing, filtering, analogie avec lm. 
-- détailler var_ et fixed_ 
-- exemple modèle PIB : un sans le package et un avec
-- deux exemples de modèle PIB avec deux spécifications
+-   détailler la théorie : smoothing, filtering, analogie avec lm.
+-   détailler var\_ et fixed\_
+-   exemple modèle PIB : un sans le package et un avec
+-   deux exemples de modèle PIB avec deux spécifications
 
 ## comparaison
 
-- décrire ce qu'on a fait : modèles, période d'estimation
-- résultats
-
-
-
+-   décrire ce qu'on a fait : modèles, période d'estimation
+-   résultats
