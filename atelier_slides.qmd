@@ -107,6 +107,8 @@ $$
 PIB_t = \beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t + \epsilon_t
 $$
 
+Tout en restant sur des modèles proches de la régression linéaire pour que les résultats restent facilement interprétables. 
+
 Il s'agira donc de passer en revue les différents modèles que nous avons pu étudier 
 
 1. Les tests statitiques à notre disposition
@@ -193,7 +195,7 @@ Limites de Hansen :
 
 -   Test joint ne s'applique pas aux indicatrices
 
-- Interprétation constante
+- Interprétation constante : peut être donnée comme stable même si une autre variable varie au cours du temps
 
 Comme tout test, ils ont leurs limites, prendre les résultats avec précaution. Ex : même si le test de Hansen ne détecte pas d'instabilité, le test de Bai et Perron peut néanmoins détecter des ruptures.
 
@@ -225,6 +227,8 @@ Avantages :
 -   Simples à comprendre et à implémenter
 
 -   Facilement combinable avec d'autres types de modèles (régressions locales)
+
+. . . 
 
 Inconvénients :
 
@@ -449,7 +453,9 @@ readRDS("graphs_atelier/plot_previsions.RDS")
 
 ## Conclusion
 
+- Plusieurs types de modèles, avec plusieurs options, se basant sur la régression linéaire
 
+- Tout ce qui a été présenté peut être reproduit grâce au package `tvCoef` qui sera plus développé lors de la partie pratique. 
 
 
 ##
