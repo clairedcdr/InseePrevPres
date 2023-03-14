@@ -11,6 +11,11 @@ format:
    smaller: true
    theme: default
    css: css/template.css
+   slide-number: true
+title-slide-attributes:
+  data-background-image: logo.png
+  data-background-size: 15%
+  data-background-position: right 50% bottom 10%
 fig-height: 7
 date: 03/16/2023
 date-format: "D MMMM YYYY"
@@ -257,12 +262,12 @@ Différences : sur les variances et sur les estimations en temps réel.
 
 . . .
 
-Dans le cas de notre modèle exemple, Bai et Perron détecte deux ruptures en 2006 Q2 et 2011 Q2. Pour simplifier les explications on ne retiendra que la deuxième. Le modèle suivant est alors estimé :
+Dans le cas de notre modèle exemple, Bai et Perron détecte une rupture en 2011 T1. Le modèle suivant est donc estimé :
 
 $$
-PIB_t = (\beta_{0,t}+ \beta_{1,t}climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t) \mathbb{1} _{t \leq 2011.25} +
+PIB_t = (\beta_{0,t}+ \beta_{1,t}climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t) \mathbb{1} _{t \leq 2011} +
 \\
-(\beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t) 1_{t > 2011.25} + \varepsilon_t 
+(\beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t) 1_{t > 2011} + \varepsilon_t 
 $$
 
 ##
@@ -379,7 +384,7 @@ PIB_t = \beta_0 + \beta_1 climat\_fr_t + \beta_2 \Delta climat\_fr_t + \varepsil
 $$
 Devient :
 $$
-PIB_t=\begin{pmatrix}1 & climat\_fr & \Delta climat\_fr\end{pmatrix}_t\alpha
+PIB_t=\begin{pmatrix}1 & climat\_fr & \Delta climat\_fr\end{pmatrix}_t
 \begin{pmatrix}
 \beta_0 \\
 \beta_1 \\ 
@@ -397,14 +402,17 @@ Deux opérations classiques : *filtering* et *smoothing*
 $$
 \hat\alpha_t = E[\alpha_t|y_0, \dots, y_n]
 $$
+Ex : régression linéaire : $\hat\alpha_t = \hat \alpha$
 
 . . . 
 
--   Filtering : estime le coefficient suivant (en $t+1$) avec les informations connues en t. Ce qui est proche des estimations en temps-réel.
+-   Filtering : estime le coefficient suivant (en $t+1$) avec les informations connues en $t$. Ce qui est proche des estimations en temps-réel.
 
 $$
 a_{t+1} = E[\alpha_{t+1}|y_0, \dots, y_t]
 $$
+
+Ex : régression linéaire : $a_{2010T2} = \hat \alpha$ estimé en utilisant les données jusqu'en 2010T1
 
 ##
 
@@ -432,7 +440,7 @@ readRDS("graphs_atelier/plot_diff.RDS")
 
 ## Résultats
 
-Etude de 25 modèles de prévision de la production manufacturière estimés entre 1990 Q1 et 2019 Q4. 
+Etude de 25 modèles de prévision de la production manufacturière estimés entre 1990 T1 et 2019 T4. 
 On estime les différents modèles présentés dans l'échantillon et en temps réel, puis on compare les RMSE des modèles par rapport au modèle linéaire. 
 Enfin on fait des moyennes par secteur.
 
