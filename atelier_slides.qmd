@@ -312,7 +312,7 @@ Remarque :
 
 ## 
 
-![Noyau en fonction de b](graphs_atelier/test.gif){fig-align="center"}
+![Noyau en fonction de b](graphs_atelier/bw_anim.gif){fig-align="center"}
 
 ##
 
