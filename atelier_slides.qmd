@@ -527,7 +527,7 @@ readRDS("graphs_atelier/plot_previsions.RDS")
 Court-terme : pause de 10/15 minutes suivie d'un atelier pratique :\
 <https://aqlt.github.io/AteliertvCoef/>
 
-Sur `tvCoef` : documentation, gestion des retards de la variable endogène
+Sur `tvCoef` : documentation, gestion des retards de la variable endogène, amélioration des estimations en temps réel autour de la date de rupture des régressions par morceaux
 
 Autour de l'étude : séminaire D2E + document de travail
 
