@@ -477,25 +477,13 @@ readRDS("graphs_atelier/plot_previsions.RDS")
 
 TODO:
 
-- TODO Alain + SSM
+- TODO SSM
 
 - Conclusion + parler du package
 
-- Développer plus sur les résultats ?
-
 - Relire TP / Slides
 
-- Revoir plan ?
-
-- dire que par défaut noyau triweight
-$$
-\kappa(x)=\frac{35}{32}\left(
-  1-
-  \left\lvert
-  x
-  \right\lvert^2
-\right)^3 \mathbb 1_{|x| \leq 1}
-$$
+- logos
 
 
 
