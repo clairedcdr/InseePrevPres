@@ -12,6 +12,8 @@ format:
    theme: default
    css: css/template.css
    slide-number: true
+   transition: slide
+   background-transition: fade
 title-slide-attributes:
   data-background-image: logo.png
   data-background-size: 15%
@@ -510,9 +512,8 @@ TODO:
 
 - Conclusion + parler du package
 
-- Relire TP / Slides
+- Relire Slides
 
-- logos
 
 
 
