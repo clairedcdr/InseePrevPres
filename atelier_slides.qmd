@@ -3,9 +3,7 @@ title: "Atelier D2E"
 subtitle: "Utilisation de modèles de régression à coefficients variant dans le temps dans le cadre de la prévision conjoncturelle"
 author:
 - Claire du Campe de Rosamel
-# TODO : PSE ?
 - Alain Quartier-la-Tente
-# TODO : logos
 format: 
   revealjs:
    smaller: true
