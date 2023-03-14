@@ -13,7 +13,6 @@ format:
    css: css/template.css
    slide-number: true
    transition: slide
-   background-transition: fade
 title-slide-attributes:
   data-background-image: logo.png
   data-background-size: 15%
@@ -312,7 +311,7 @@ Remarque :
 
 ## 
 
-![Noyau en fonction de b](graphs_atelier/bw_anim.gif){fig-align="center"}
+![](graphs_atelier/bw_anim.gif){fig-align="center"}
 
 ##
 
@@ -379,7 +378,7 @@ Régression linéaire :
 $$
 \begin{cases}
 y_t=X_t\alpha+\varepsilon_t,\quad&\varepsilon_t\sim\mathcal N(0,\sigma^2)\\
-\alpha_{t+1}=\alpha_t=\dots=\alpha_t
+\alpha_{t+1}=\alpha_t=\dots=\alpha_0
 \end{cases}
 $$
 C'est-à-dire :
