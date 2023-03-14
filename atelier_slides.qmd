@@ -378,7 +378,7 @@ Régression linéaire :
 $$
 \begin{cases}
 y_t=X_t\alpha+\varepsilon_t,\quad&\varepsilon_t\sim\mathcal N(0,\sigma^2)\\
-\alpha_{t+1}=\alpha_t=\dots=\alpha_0
+\alpha_{t+1}=\alpha_t=\dots=\alpha_0=\alpha
 \end{cases}
 $$
 C'est-à-dire :
@@ -461,8 +461,8 @@ rownames(stat_is) <- paste(rownames(stat_is), c("(7)","(5)","(5)","(5)","(3)"))
 stat_is <- stat_is[,c(2:6)]
 colnames(stat_is) <- c("Reg linéaire",
                         "Espace état",
-                        "Reg morceaux",
-                        "Reg locale + morceaux",
+                        "Reg morceau",
+                        "Reg locale + morceau",
                         "Reg locale")
 knitr::kable(stat_is, format.args = list(decimal.mark = ","),
                   align = "c") %>% 
@@ -487,8 +487,8 @@ rownames(stat_oos) <- paste(rownames(stat_oos), c("(7)","(5)","(5)","(5)","(3)")
 stat_oos <- stat_oos[,c(2:6)]
 colnames(stat_oos) <- c("Reg linéaire",
                         "Espace état",
-                        "Reg morceaux",
-                        "Reg locale + morceaux",
+                        "Reg morceau",
+                        "Reg locale + morceau",
                         "Reg locale")
 knitr::kable(stat_oos, format.args = list(decimal.mark = ","),
                   align = "c") %>% 
