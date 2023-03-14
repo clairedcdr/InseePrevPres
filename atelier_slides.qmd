@@ -98,20 +98,20 @@ Ce sont les valeurs ajustées qu'on obtient après une régression linéaire.
 - **En temps réel** : prévisions hors échantillon qui prévoient des valeurs en dehors d'un échantillon de données.\
 {{< fa arrow-circle-right >}} Modèle estimé jusqu'à $t$ pour effectuer la prévision de $t+1$, puis on recommence en estimant le modèle jusqu'à $t+1$.
 
-## 
+## {transition="none"}
 
 ```{r}
 library(dygraphs)
 readRDS("graphs_atelier/plot_pib.RDS")
 ```
 
-## 
+## {transition="none"}
 
 ```{r}
 readRDS("graphs_atelier/plot_lm.RDS")
 ```
 
-##
+## {transition="none"}
 
 ```{r}
 readRDS("graphs_atelier/oos_lm.RDS")
@@ -271,13 +271,13 @@ PIB_t = (\beta_{0,t}+ \beta_{1,t}climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t)
 (\beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t) 1_{t > 2011} + \varepsilon_t 
 $$
 
-##
+## {transition="none"}
 
 ```{r}
 readRDS("graphs_atelier/plot_piecelm.RDS")
 ```
 
-## 
+## {transition="none"}
 
 ```{r}
 readRDS("graphs_atelier/oos_piecelm.RDS")
@@ -327,19 +327,19 @@ Remarque :
 
 -   En effectuer deux régression, on peut fixer les coefficients de certaines variables. 
 
-##
+## {transition="none"}
 
 ```{r}
 readRDS("graphs_atelier/plot_tvlm.RDS")
 ```
 
-## 
+## {transition="none"}
 
 ```{r}
 readRDS("graphs_atelier/oos_tvlm.RDS")
 ```
 
-##
+## 
 
 ```{r}
 readRDS("graphs_atelier/plot_coef_tvlm.RDS")
@@ -415,19 +415,19 @@ $$
 
 Ex : régression linéaire : $a_{2010T2} = \hat \alpha$ estimé en utilisant les données jusqu'en 2010T1
 
-##
+## {transition="none"}
 
 ```{r}
 readRDS("graphs_atelier/plot_ssm.RDS")
 ```
 
-## 
+## {transition="none"}
 
 ```{r}
 readRDS("graphs_atelier/oos_ssm.RDS")
 ```
 
-##
+## 
 
 ```{r}
 #| layout: [[50, 50], [50, 50]]
