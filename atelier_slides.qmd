@@ -57,7 +57,7 @@ Estimé grâce à la méthode des moindres carrés ordinaires
 Exemple simple : prévision du PIB à partir du climat des affaires France (au mois 2) en niveau et en différence
 
 $$
-PIB_t = \beta_0 + \beta_1 climat\_fr_t + \beta_2 \Delta climat\_fr_t + \epsilon_t
+PIB_t = \beta_0 + \beta_1 climat\_fr_t + \beta_2 \Delta climat\_fr_t + \varepsilon_t
 $$
 
 . . . 
@@ -65,7 +65,7 @@ $$
 Estimation entre 2000 T1 et 2019 T4 : 
 
 $$
-PIB_t = -2,09 + 0,02 \times climat\_fr_t + 0,04 \times \Delta climat\_fr_t + \epsilon_t
+PIB_t = -2,09 + 0,02 \times climat\_fr_t + 0,04 \times \Delta climat\_fr_t + \varepsilon_t
 $$
 
 
@@ -118,7 +118,7 @@ readRDS("graphs_atelier/oos_lm.RDS")
 Comparer différentes méthodes pour modéliser et estimer : 
 
 $$
-PIB_t = \beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t + \epsilon_t
+PIB_t = \beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t + \varepsilon_t
 $$
 
 Idée : rester proche du cas de la régression linéaire pour que les résultats restent facilement interprétables. 
@@ -142,7 +142,7 @@ Proposent un algorithme efficace pour trouver les dates de ruptures (package `st
 Soit le modèle :
 
 $$
-PIB_t = \beta_0 + \beta_1 climat\_fr_t + \beta_2 \Delta climat\_fr_t + \epsilon_t
+PIB_t = \beta_0 + \beta_1 climat\_fr_t + \beta_2 \Delta climat\_fr_t + \varepsilon_t
 $$
 
 . . .
@@ -150,11 +150,11 @@ $$
 On le sépare en deux, autour d'une date $t_1$, et on obtient deux sous-modèles :
 
 $$
-\forall t \leq t_1 :\quad PIB_t = \beta_0' + \beta_1' climat\_fr_t + \beta_2' \Delta climat\_fr_t + \epsilon_t
+\forall t \leq t_1 :\quad PIB_t = \beta_0' + \beta_1' climat\_fr_t + \beta_2' \Delta climat\_fr_t + \varepsilon_t
 $$
 
 $$
-\forall t > t_1 :\quad PIB_t = \beta_0'' + \beta_1'' climat\_fr_t + \beta_2'' \Delta climat\_fr_t + \epsilon_t
+\forall t > t_1 :\quad PIB_t = \beta_0'' + \beta_1'' climat\_fr_t + \beta_2'' \Delta climat\_fr_t + \varepsilon_t
 $$
 
 L'hypothèse nulle suppose que $\beta_0' = \beta_0''$, $\beta_1' = \beta_1''$ et $\beta_2' = \beta_2''$. Autrement dit, on teste si les deux modèles obtenus sont significativement différents.
@@ -171,14 +171,14 @@ $$
 PIB_t = (\beta_{0} + \beta_{1} climat\_fr_t + \beta_{2} \Delta climat\_fr_t) \mathbb 1_{t \leq t_1} +
 \\
 (\beta_{0}' + \beta_{1}' climat\_fr_t + \beta_{2}' \Delta climat\_fr_t)\mathbb 1_{t > t_1} +
-\epsilon_t
+\varepsilon_t
 $$
 
 On ne peut pas tester :
 
 $$
 PIB_t = \beta_{0} + \beta_{1} climat\_fr_t + (\beta_{2} \mathbb 1_{t \leq t_1}+ \beta_{2}' \mathbb 1_{t > t_1})\Delta climat\_fr_t +
-\epsilon_t
+\varepsilon_t
 $$
 
 . . .
@@ -262,7 +262,7 @@ Dans le cas de notre modèle exemple, Bai et Perron détecte deux ruptures en 20
 $$
 PIB_t = (\beta_{0,t}+ \beta_{1,t}climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t) \mathbb{1} _{t \leq 2011.25} +
 \\
-(\beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t) 1_{t > 2011.25} + \epsilon_t 
+(\beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t) 1_{t > 2011.25} + \varepsilon_t 
 $$
 
 ##
@@ -317,9 +317,9 @@ Remarque :
 
 Remarque :
 
--   Possibilité de combiner les précédents modèles en runant une régression locale sur des données coupées selon Bai et Perron
+-   Possibilité de combiner les précédents modèles en estimant une régression locale sur des données coupées 
 
--   Grâce à des paramètres ou fonctions, on peut fixer les coefficients de certaines variables. Egalement possible pour les régression par morceaux.
+-   En effectuer deux régression, on peut fixer les coefficients de certaines variables. 
 
 ##
 
@@ -346,13 +346,12 @@ Modélisation espace-état est une méthodologie générale qui permet de traite
 
 . . .
 
-On suppose que le problème est déterminé par une série de vecteurs *non observés* $\alpha_1,\dots,\alpha_n$ associés aux observations $y_1,\dots,y_n$, la relation entre $\alpha_t$ et $y_t$ étant spécifiée par le modèle espace-état.
+Hypothèse : problème déterminé par une série de vecteurs *non observés* $\alpha_1,\dots,\alpha_n$ associés aux observations $y_1,\dots,y_n$, la relation entre $\alpha_t$ et $y_t$ étant spécifiée par le modèle espace-état.
 
 . . .
 
-Plusieurs formes de modèles sont possibles, les plus simples étant les modèles linéaires gaussiens. Nous utilisons une version simplifiée sous la forme :
-
-. . .
+Plusieurs formes de modèles sont possibles, les plus simples étant les modèles linéaires gaussiens.\
+Version simplifiée :
 
 $$
 \begin{cases}
@@ -361,17 +360,35 @@ y_t=X_t\alpha_t+\varepsilon_t,\quad&\varepsilon_t\sim\mathcal N(0,\sigma^2)\\
 \end{cases},\text{ avec }\eta_t\text{ et }\varepsilon_t\text{ indépendants}
 $$
 
-avec $y_t$ de dimension $p\times 1$ vecteur des observations, et $\alpha_t$ de dimension $m \times 1$ vecteur d'états (*state vector*). Et $\sigma^2$ un facteur simplifiant les estimations.
+avec $y_t$ de dimension $p\times 1$ vecteur des observations, et $\alpha_t$ de dimension $m \times 1$ vecteur d'états (*state vector*). 
 
-. . .
+$\sigma^2$ un facteur simplifiant les estimations (*Concentration of loglikelihood*).
 
-La première équation est l'équation d'observation (*observation equation*) et la seconde l'équation d'état (*state equation*).
+## Retour sur la régression linéaire
 
-## 
+Régression linéaire :
+$$
+\begin{cases}
+y_t=X_t\alpha+\varepsilon_t,\quad&\varepsilon_t\sim\mathcal N(0,\sigma^2)\\
+\alpha_{t+1}=\alpha_t=\dots=\alpha_t
+\end{cases}
+$$
+C'est-à-dire :
+$$
+PIB_t = \beta_0 + \beta_1 climat\_fr_t + \beta_2 \Delta climat\_fr_t + \varepsilon_t
+$$
+Devient :
+$$
+PIB_t=\begin{pmatrix}1 & climat\_fr & \Delta climat\_fr\end{pmatrix}_t\alpha
+\begin{pmatrix}
+\beta_0 \\
+\beta_1 \\ 
+\beta_2
+\end{pmatrix} + \varepsilon_t
+$$
 
-Pour simplifier les calculs et les rendre plus rapide (sutout en présence de beaucoup de données), cette méthode utilise certaines techniques permettant d'estimer tous les paramètres de manière dynamique, comme le filtre de Kalman.
+## Estimation par filtre de Kalman
 
-. . .
 
 Deux opérations classiques : *filtering* et *smoothing*
 
@@ -415,7 +432,9 @@ readRDS("graphs_atelier/plot_diff.RDS")
 
 ## Résultats
 
-Etude de 25 modèles de prévision de la production manufacturière estimés entre 1990 Q1 et 2019 Q4. On estime les différents modèles présentés dans l'échantillon et en temps réel, puis on compare les RMSE des modèles par rapport au modèle linéaire. Enfin on fait des moyennes par secteur.
+Etude de 25 modèles de prévision de la production manufacturière estimés entre 1990 Q1 et 2019 Q4. 
+On estime les différents modèles présentés dans l'échantillon et en temps réel, puis on compare les RMSE des modèles par rapport au modèle linéaire. 
+Enfin on fait des moyennes par secteur.
 
 . . . 
 
@@ -467,6 +486,8 @@ readRDS("graphs_atelier/plot_previsions.RDS")
 ```
 
 ## Conclusion
+
+- De nombreux modèles
 
 - Plusieurs types de modèles, avec plusieurs options, se basant sur la régression linéaire
 
