@@ -215,6 +215,8 @@ Limites de Hansen :
 
 - Test joint ne s'applique pas aux indicatrices
 
+- Ne s'applique que sur les variables stationnaires
+
 . . .
 
 {{< fa triangle-exclamation >}} Comme tout test, ils ont leurs limites, prendre les résultats avec précaution.\
@@ -458,7 +460,13 @@ stat_is <- readRDS("graphs_atelier/stats_is.RDS")
 stat_is <- round(stat_is, digits = 2)
 rownames(stat_is) <- paste(rownames(stat_is), c("(7)","(5)","(5)","(5)","(3)"))
 stat_is <- stat_is[,c(2:6)]
-kableExtra::kable(stat_is) %>% 
+colnames(stat_is) <- c("Reg linéaire",
+                        "Espace état",
+                        "Reg morceaux",
+                        "Reg locale + morceaux",
+                        "Reg locale")
+knitr::kable(stat_is, format.args = list(decimal.mark = ","),
+                  align = "c") %>% 
   kable_styling(bootstrap_options = c("condensed", "hover"), 
                 position = "center",
                 full_width = F) %>% 
@@ -478,7 +486,13 @@ stat_oos <- readRDS("graphs_atelier/stats_oos.RDS")
 stat_oos <- round(stat_oos, digits = 2)
 rownames(stat_oos) <- paste(rownames(stat_oos), c("(7)","(5)","(5)","(5)","(3)"))
 stat_oos <- stat_oos[,c(2:6)]
-kableExtra::kable(stat_oos) %>% 
+colnames(stat_oos) <- c("Reg linéaire",
+                        "Espace état",
+                        "Reg morceaux",
+                        "Reg locale + morceaux",
+                        "Reg locale")
+knitr::kable(stat_oos, format.args = list(decimal.mark = ","),
+                  align = "c") %>% 
   kable_styling(bootstrap_options = c("condensed", "hover"), 
                 position = "center",
                 full_width = F) %>% 
@@ -487,7 +501,8 @@ kableExtra::kable(stat_oos) %>%
 
 . . . 
 
-Les modèles espace-état sont meilleurs que le modèle linéaire en terme de RMSE pour la prévision en temps réel. Pour ce qui est des autres modèles, plus variable d'un modèle à l'autre.
+Les modèles espace-état sont meilleurs que le modèle linéaire en terme de RMSE pour la prévision en temps réel.
+Pour ce qui est des autres modèles, plus variable d'un modèle à l'autre.
 
 ##
 
@@ -497,22 +512,27 @@ readRDS("graphs_atelier/plot_previsions.RDS")
 
 ## Conclusion
 
-- De nombreux modèles
+- De nombreux modèles peuvent être estimés autour des régressions linéaires : le cadre reste simple mais la modélisation est plus complexe\
+{{< fa arrow-circle-right >}} choix de modélisations doivent être faits
 
-- Plusieurs types de modèles, avec plusieurs options, se basant sur la régression linéaire
+. . .
 
-- Tout ce qui a été présenté peut être reproduit grâce au package `tvCoef` qui sera plus développé lors de la partie pratique. 
+- Même s'ils peuvent améliorer les performances des modèles «\ classiques\ » ils ne les remplacent pas pour autant
+
+. . .
+
+- Modèles parfois complexes à implémenter (notamment espace-état)\
+{{< fa regular face-smile >}} `tvCoef` peut vous aider (<https://github.com/AQLT/tvCoef>)
 
 
-##
+##  À venir
 
-TODO:
+Court-terme : pause de 10/15 minutes suivie d'un atelier pratique :\
+<https://aqlt.github.io/AteliertvCoef/>
 
-- TODO SSM
+Sur `tvCoef` : documentation, gestion des retards de la variable endogène
 
-- Conclusion + parler du package
-
-- Relire Slides
+Autour de l'étude : séminaire D2E + document de travail
 
 
 
