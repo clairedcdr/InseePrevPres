@@ -75,6 +75,18 @@ $$
 
 ## 
 
+Deux types d'estimations : estimations **dans l'échantillon** et estimations **en temps réel**. 
+
+- **Dans l'échantillon** : utilise toutes les données disponibles pour estimer les valeurs au sein de l'échantillon. 
+Ce sont les valeurs ajustées qu'on obtient après une régression linéaire. 
+
+. . . 
+
+- **En temps réel** : prévisions hors échantillon qui prévoient des valeurs en dehors d'un échantillon de données.\
+{{< fa arrow-circle-right >}} Modèle estimé jusqu'à $t$ pour effectuer la prévision de $t+1$, puis on recommence en estimant le modèle jusqu'à $t+1$.
+
+. . .
+
 Qualité des modèles évaluée par l'analyse des résidus et le calcul du RMSE (*root mean square error*) :
 
 $$
@@ -86,17 +98,6 @@ $$
 On peut aussi s'appuyer sur le test de Diebold Mariano :
 compare les erreurs de prévision de deux modèles et si leur différence est significative. 
 
-. . . 
-
-Deux types d'estimations : estimations **dans l'échantillon** et estimations **en temps réel**. 
-
-- **Dans l'échantillon** : utilise toutes les données disponibles pour estimer les valeurs au sein de l'échantillon. 
-Ce sont les valeurs ajustées qu'on obtient après une régression linéaire. 
-
-. . . 
-
-- **En temps réel** : prévisions hors échantillon qui prévoient des valeurs en dehors d'un échantillon de données.\
-{{< fa arrow-circle-right >}} Modèle estimé jusqu'à $t$ pour effectuer la prévision de $t+1$, puis on recommence en estimant le modèle jusqu'à $t+1$.
 
 ## {transition="none"}
 
