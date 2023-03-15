@@ -368,6 +368,8 @@ $$
 
 avec $y_t$ de dimension $p\times 1$ vecteur des observations, et $\alpha_t$ de dimension $m \times 1$ vecteur d'états (*state vector*). 
 
+. . .
+
 $\sigma^2$ un facteur simplifiant les estimations (*Concentration of loglikelihood*).
 
 ## Retour sur la régression linéaire
@@ -437,6 +439,11 @@ readRDS("graphs_atelier/plot_climat.RDS")
 readRDS("graphs_atelier/plot_diff.RDS")
 ```
 
+##
+
+```{r}
+readRDS("graphs_atelier/plot_previsions.RDS")
+```
 
 
 ## Résultats
@@ -501,11 +508,6 @@ knitr::kable(stat_oos, format.args = list(decimal.mark = ","),
 Les modèles espace-état sont meilleurs que le modèle linéaire en terme de RMSE pour la prévision en temps réel.
 Pour ce qui est des autres modèles, plus variable d'un modèle à l'autre.
 
-##
-
-```{r}
-readRDS("graphs_atelier/plot_previsions.RDS")
-```
 
 ## Conclusion
 
@@ -529,7 +531,9 @@ Court-terme : pause de 10/15 minutes suivie d'un atelier pratique :\
 
 Sur `tvCoef` : documentation, gestion des retards de la variable endogène, amélioration des estimations en temps réel autour de la date de rupture des régressions par morceaux
 
-Autour de l'étude : séminaire D2E + document de travail
+Autour cette l'étude : séminaire D2E + document de travail
+
+Autres études : analyse de ces méthodes pour la CJO
 
 
 
