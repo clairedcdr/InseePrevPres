@@ -93,10 +93,6 @@ $$
 \sqrt{\frac{\sum_{t=1}^{T} (PIB_t - \widehat{PIB}_t)^2}{T}}
 $$
 
-. . . 
-
-On peut aussi s'appuyer sur le test de Diebold Mariano :
-compare les erreurs de prévision de deux modèles et si leur différence est significative. 
 
 
 ## {transition="none"}
@@ -272,6 +268,18 @@ PIB_t = (\beta_{0,t}+ \beta_{1,t}climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t)
 (\beta_{0,t} + \beta_{1,t} climat\_fr_t + \beta_{2,t} \Delta climat\_fr_t) 1_{t > 2011} + \varepsilon_t 
 $$
 
+. . . 
+
+Ce qui donne : 
+
+$$
+PIB_t = (-2,9+ 0,03 \times climat\_fr_t + 0,07 \times \Delta climat\_fr_t) \mathbb{1} _{t \leq 2011} +
+\\
+(-1,04 + 0,01 \times climat\_fr_t - 0,01 \times \Delta climat\_fr_t) 1_{t > 2011} + \varepsilon_t
+$$
+
+
+
 ## {transition="none"}
 
 ```{r}
@@ -300,11 +308,6 @@ Avec $K_b(x)=\frac 1 b K(x/b)$ une fonction de noyau pour pondérer les observat
 
 Remarque :
 
--   Si $K_b=1$ (noyau uniforme et $b\geq 1$) on retrouve la régression linéaire
-
-. . .
-
--   Problème du choix de $b$ : par validation croisée (entre 0 et 20) mais peu discriminant\
 -   Si $b\geq1$ on utilise toutes les données pour chaque estimation.\
 -   Si $b=20$ le poids donné à toutes les données se rapproche de 1, estimation $\simeq$ à la régression linéaire
 
@@ -316,8 +319,8 @@ Remarque :
 
 {{< fa regular face-frown >}} Inconvénient :
 
--   Tous les coefficients varient
-
+-   Tous les coefficients varient\
+-   Problème du choix de $b$ : par validation croisée (entre 0 et 20) mais peu discriminant\
 -   Fortes révisions possibles en temps-réel : ajout d'un point, changement de b, noyau asymétrique
 
 . . .

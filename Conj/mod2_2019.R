@@ -52,22 +52,22 @@ plot_pib = dygraph(data_plot$PIB, main = "PIB entre 2000 et 2019") %>%
   dySeries("V1", label = "PIB") %>%
   dyLegend(show = "always", width = 130)
 
-plot_lm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm), main = "Valeurs ajustées modèle linéaire  <br> <small> RMSE = 0,332") %>%
+plot_lm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm), main = "Valeurs ajustées modèle linéaire  <br> <small> RMSE lineaire = 0,332") %>%
   dyOptions(colors = c("black", "red"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
 
-plot_piecelm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, piecelm = data_plot$piecelm), main = "Valeurs ajustées régression par morceaux  <br> <small> RMSE = 0,295") %>%
+plot_piecelm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, piecelm = data_plot$piecelm), main = "Valeurs ajustées régression par morceaux  <br> <small> RMSE lineaire = 0,332, RMSE morceaux = 0,295") %>%
   dyOptions(colors = c("black", "red", "green"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
 
-plot_tvlm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, tvlm = data_plot$tvlm), main = "Valeurs ajustées régression locale <br> <small> RMSE = 0,292") %>%
+plot_tvlm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, tvlm = data_plot$tvlm), main = "Valeurs ajustées régression locale <br> <small> RMSE lineaire = 0,332, RMSE locale = 0,292") %>%
   dyOptions(colors = c("black", "red", "blue"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
 
-plot_ssm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, ssm = data_plot$ssm), main = "Valeurs ajustées modèle espace-état  <br> <small> RMSE = 0,291") %>%
+plot_ssm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, ssm = data_plot$ssm), main = "Valeurs ajustées modèle espace-état  <br> <small> RMSE lineaire = 0,332, RMSE espace etat = 0,291") %>%
   dyOptions(colors = c("black", "red", "purple"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
@@ -86,22 +86,22 @@ data_plot2 = cbind(time(get_data(mod2_2019)),
                    test3$prevision)
 colnames(data_plot2) = c("Time", "PIB", "lm", "piecelm", "tvlm", "ssm")
 
-oos_lm = dygraph(cbind(PIB = data_plot2[,"PIB"], lm = data_plot2[,"lm"]), main = "Estimations en temps réel modèle linéaire  <br> <small> RMSE = 0,393") %>%
+oos_lm = dygraph(cbind(PIB = data_plot2[,"PIB"], lm = data_plot2[,"lm"]), main = "Estimations en temps réel modèle linéaire  <br> <small> RMSE lineaire = 0,393") %>%
   dyOptions(colors = c("black", "red"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
 
-oos_piecelm = dygraph(cbind(PIB = data_plot2[,"PIB"], lm = data_plot2[,"lm"], piecelm = data_plot2[,"piecelm"]), main = "Estimations en temps réel régression par morceaux  <br> <small> RMSE = 0,391") %>%
+oos_piecelm = dygraph(cbind(PIB = data_plot2[,"PIB"], lm = data_plot2[,"lm"], piecelm = data_plot2[,"piecelm"]), main = "Estimations en temps réel régression par morceaux  <br> <small> RMSE lineaire = 0,393, RMSE morceaux = 0,391") %>%
   dyOptions(colors = c("black", "red", "green"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
 
-oos_tvlm = dygraph(cbind(PIB = data_plot2[,"PIB"], lm = data_plot2[,"lm"], tvlm = data_plot2[,"tvlm"]), main = "Estimations en temps réel régression locale  <br> <small> RMSE = 0,598") %>%
+oos_tvlm = dygraph(cbind(PIB = data_plot2[,"PIB"], lm = data_plot2[,"lm"], tvlm = data_plot2[,"tvlm"]), main = "Estimations en temps réel régression locale  <br> <small> RMSE lineaire = 0,393, RMSE locale = 0,598") %>%
   dyOptions(colors = c("black", "red", "blue"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
 
-oos_ssm = dygraph(cbind(PIB = data_plot2[,"PIB"], lm = data_plot2[,"lm"], ssm = data_plot2[,"ssm"]), main = "Prévisions en temps réel modèle espace-état  <br> <small> RMSE = 0,352") %>%
+oos_ssm = dygraph(cbind(PIB = data_plot2[,"PIB"], lm = data_plot2[,"lm"], ssm = data_plot2[,"ssm"]), main = "Prévisions en temps réel modèle espace-état  <br> <small> RMSE lineaire = 0,393, RMSE espace etat= 0,352") %>%
   dyOptions(colors = c("black", "red", "purple")) %>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
