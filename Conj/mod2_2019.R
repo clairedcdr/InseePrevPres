@@ -28,13 +28,13 @@ test2 = ssm_lm(mod2_2019, var_intercept = 0.1, var_variables = 0.1, fixed_var_in
 
 test3 = ssm_lm_oos(mod2_2019,  var_intercept = 0.1, var_variables = 0.1, fixed_var_intercept = FALSE, fixed_var_variables = FALSE)
 
-plot_all = dygraph(cbind(PIB = get_data(mod2_2019)[,1],
-                         lm = test$prevision$prev_lm$prevision,
-                         piecelm = test$prevision$prev_piece_lm$prevision,
-                         tvlm = test$prevision$prev_tvlm$prevision,
-                         ssm = test3$prevision))%>%
-  dyOptions(colors = c("black", "orange", "green", "red", "purple" ))
-saveRDS(plot_all, file = "graphs_atelier/plot_all.RDS")
+# plot_all = dygraph(cbind(PIB = get_data(mod2_2019)[,1],
+#                          lm = test$prevision$prev_lm$prevision,
+#                          piecelm = test$prevision$prev_piece_lm$prevision,
+#                          tvlm = test$prevision$prev_tvlm$prevision,
+#                          ssm = test3$prevision))%>%
+#   dyOptions(colors = c("black", "orange", "green", "red", "purple" ))
+# saveRDS(plot_all, file = "graphs_atelier/plot_all.RDS")
 
 ## Graphs
 
@@ -46,28 +46,28 @@ data_plot = data.frame(time(get_data(mod2_2019)),
                        test2$fitted[, "smoothed"])
 colnames(data_plot) = c("Time", "PIB", "lm", "piecelm", "tvlm", "ssm")
 
-plot_pib = dygraph(data_plot$PIB, main = "PIB entre 1990 et 2019") %>%
+plot_pib = dygraph(data_plot$PIB, main = "PIB entre 2000 et 2019") %>%
   dyOptions(colors = c("black"))%>%
   dyRangeSelector() %>%
   dySeries("V1", label = "PIB") %>%
   dyLegend(show = "always", width = 130)
 
-plot_lm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm), main = "Valeurs ajustées modèle linéaire") %>%
+plot_lm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm), main = "Valeurs ajustées modèle linéaire  <br> <small> RMSE = 0,332") %>%
   dyOptions(colors = c("black", "red"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
 
-plot_piecelm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, piecelm = data_plot$piecelm), main = "Valeurs ajustées régression par morceaux") %>%
+plot_piecelm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, piecelm = data_plot$piecelm), main = "Valeurs ajustées régression par morceaux  <br> <small> RMSE = 0,295") %>%
   dyOptions(colors = c("black", "red", "green"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
 
-plot_tvlm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, tvlm = data_plot$tvlm), main = "Valeurs ajustées régression locale") %>%
+plot_tvlm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, tvlm = data_plot$tvlm), main = "Valeurs ajustées régression locale <br> <small> RMSE = 0,292") %>%
   dyOptions(colors = c("black", "red", "blue"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
 
-plot_ssm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, ssm = data_plot$ssm), main = "Valeurs ajustées modèle espace-état") %>%
+plot_ssm = dygraph(cbind(PIB = data_plot$PIB, lm = data_plot$lm, ssm = data_plot$ssm), main = "Valeurs ajustées modèle espace-état  <br> <small> RMSE = 0,291") %>%
   dyOptions(colors = c("black", "red", "purple"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
@@ -86,22 +86,22 @@ data_plot2 = cbind(time(get_data(mod2_2019)),
                    test3$prevision)
 colnames(data_plot2) = c("Time", "PIB", "lm", "piecelm", "tvlm", "ssm")
 
-oos_lm = dygraph(cbind(PIB = data_plot2[,"PIB"], lm = data_plot2[,"lm"]), main = "Estimations en temps réel modèle linéaire") %>%
+oos_lm = dygraph(cbind(PIB = data_plot2[,"PIB"], lm = data_plot2[,"lm"]), main = "Estimations en temps réel modèle linéaire  <br> <small> RMSE = 0,393") %>%
   dyOptions(colors = c("black", "red"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
 
-oos_piecelm = dygraph(cbind(PIB = data_plot2[,"PIB"], lm = data_plot2[,"lm"], piecelm = data_plot2[,"piecelm"]), main = "Estimations en temps réel régression par morceaux") %>%
+oos_piecelm = dygraph(cbind(PIB = data_plot2[,"PIB"], lm = data_plot2[,"lm"], piecelm = data_plot2[,"piecelm"]), main = "Estimations en temps réel régression par morceaux  <br> <small> RMSE = 0,391") %>%
   dyOptions(colors = c("black", "red", "green"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
 
-oos_tvlm = dygraph(cbind(PIB = data_plot2[,"PIB"], lm = data_plot2[,"lm"], tvlm = data_plot2[,"tvlm"]), main = "Estimations en temps réel régression locale") %>%
+oos_tvlm = dygraph(cbind(PIB = data_plot2[,"PIB"], lm = data_plot2[,"lm"], tvlm = data_plot2[,"tvlm"]), main = "Estimations en temps réel régression locale  <br> <small> RMSE = 0,598") %>%
   dyOptions(colors = c("black", "red", "blue"))%>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
 
-oos_ssm = dygraph(cbind(PIB = data_plot2[,"PIB"], lm = data_plot2[,"lm"], ssm = data_plot2[,"ssm"]), main = "Prévisions en temps réel modèle espace-état") %>%
+oos_ssm = dygraph(cbind(PIB = data_plot2[,"PIB"], lm = data_plot2[,"lm"], ssm = data_plot2[,"ssm"]), main = "Prévisions en temps réel modèle espace-état  <br> <small> RMSE = 0,352") %>%
   dyOptions(colors = c("black", "red", "purple")) %>%
   dyRangeSelector() %>%
   dyLegend(width = 130)
