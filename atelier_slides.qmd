@@ -343,12 +343,6 @@ readRDS("graphs_atelier/plot_tvlm.RDS")
 readRDS("graphs_atelier/oos_tvlm.RDS")
 ```
 
-## 
-
-```{r}
-readRDS("graphs_atelier/plot_coef_tvlm.RDS")
-```
-
 
 ## Modèles espace-état
 
