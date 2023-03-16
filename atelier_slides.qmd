@@ -309,7 +309,7 @@ Avec $K_b(x)=\frac 1 b K(x/b)$ une fonction de noyau pour pondérer les observat
 Remarque :
 
 -   Si $b\geq1$ on utilise toutes les données pour chaque estimation.\
--   Si $b=20$ le poids donné à toutes les données se rapproche de 1, estimation $\simeq$ à la régression linéaire
+-   Si $b \rightarrow 20$ le poids associé à chaque donnée tend à devenir le même pour toutes, estimation $\simeq$ à la régression linéaire
 
 ## 
 
